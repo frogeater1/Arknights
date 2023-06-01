@@ -32,8 +32,8 @@ namespace Arknights.Data
                 Environment =
                 {
                     ["excel"] = "Config",
-                    ["json"] = "test_for_arknights10/Assets/Import/Data",
-                    ["cs"] = "test_for_arknights10/Assets/Import/DataScripts",
+                    ["json"] = "Arknights/Assets/Import/Data",
+                    ["cs"] = "Arknights/Assets/Import/DataScripts",
                     ["namespace"] = "Arknights.Data",
                     ["database"] = "true"
                 }
