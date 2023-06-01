@@ -8,7 +8,7 @@
       "hash": "f2773f585e762480c835ac718b82b87cb111e500"
     },
     "com.esotericsoftware.spine.urp-shaders": {
-      "version": "file:../Assets/com.esotericsoftware.spine.urp-shaders-3.8-2019.3",
+      "version": "file:C:/Users/frogeater/code/untiyProjects/demo4/com.esotericsoftware.spine.urp-shaders-3.8-2019.3",
       "depth": 0,
       "source": "local",
       "dependencies": {

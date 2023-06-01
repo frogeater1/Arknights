@@ -14,16 +14,16 @@ namespace Arknights
             set
             {
                 base.selected = value;
-                // Map.Instance.decal_地面.SetActive(value && (character.loadData.部署类型 == 部署类型.地面 || character.loadData.部署类型 == 部署类型.Both));
-                // Map.Instance.decal_高台.SetActive(value && (character.loadData.部署类型 == 部署类型.高台 || character.loadData.部署类型 == 部署类型.Both));
+                Map.Instance.decal_地面.SetActive(value && (character.loadData.部署类型 == 部署类型.地面 || character.loadData.部署类型 == 部署类型.Both));
+                Map.Instance.decal_高台.SetActive(value && (character.loadData.部署类型 == 部署类型.高台 || character.loadData.部署类型 == 部署类型.Both));
                 if (value)
                 {
-                    // Game.Instance.ui_battle.ShowStats(true, character);
+                    Game.Instance.ui_battle.ShowStats(true, character);
                     // Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, -3));
                 }
                 else
                 {
-                    // Game.Instance.ui_battle.ShowStats(false);
+                    Game.Instance.ui_battle.ShowStats(false);
                     // Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, 0));
                 }
             }
