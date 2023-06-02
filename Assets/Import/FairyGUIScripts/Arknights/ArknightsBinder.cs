@@ -18,7 +18,6 @@ namespace Arknights
             UIObjectFactory.SetPackageItemExtension(UI_Button_white.URL, typeof(UI_Button_white));
             UIObjectFactory.SetPackageItemExtension(UI_Button_blue.URL, typeof(UI_Button_blue));
             UIObjectFactory.SetPackageItemExtension(UI_DirectionSelect.URL, typeof(UI_DirectionSelect));
-            UIObjectFactory.SetPackageItemExtension(UI_Button_取消放置.URL, typeof(UI_Button_取消放置));
             UIObjectFactory.SetPackageItemExtension(UI_Button_ctrl.URL, typeof(UI_Button_ctrl));
             UIObjectFactory.SetPackageItemExtension(UI_Button_gray.URL, typeof(UI_Button_gray));
             UIObjectFactory.SetPackageItemExtension(UI_Button_设置.URL, typeof(UI_Button_设置));
@@ -29,6 +28,7 @@ namespace Arknights
             UIObjectFactory.SetPackageItemExtension(UI_Button_角色卡.URL, typeof(UI_Button_角色卡));
             UIObjectFactory.SetPackageItemExtension(UI_Loading.URL, typeof(UI_Loading));
             UIObjectFactory.SetPackageItemExtension(UI_Drag.URL, typeof(UI_Drag));
+            UIObjectFactory.SetPackageItemExtension(UI_Button_取消.URL, typeof(UI_Button_取消));
         }
     }
 }

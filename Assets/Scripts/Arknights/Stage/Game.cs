@@ -1,4 +1,6 @@
-﻿namespace Arknights
+﻿using UnityEngine;
+
+namespace Arknights
 {
     public class Game : Singleton<Game>
     {
@@ -11,8 +13,8 @@
 
         public UI_Battle ui_battle;
         public UI_DirectionSelect ui_directionSelect;
-
-
+        
+        
         protected override void Awake()
         {
             base.Awake();

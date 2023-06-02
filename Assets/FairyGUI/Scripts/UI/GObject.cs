@@ -85,7 +85,7 @@ namespace FairyGUI
         /// <summary>
         /// 当前全局正在被拖动的对象
         /// </summary>
-        public static GObject draggingObject { get; private set; }
+        public static GObject draggingObject { get; protected set; }
 
         /// <summary>
         /// 

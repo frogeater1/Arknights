@@ -24,6 +24,9 @@ namespace Arknights
 
         //tmp 当前在用哪套皮肤
         public int skinIdx;
+        
+        
+        public SkeletonAnimation skeletonAnimation;
 
 #if UNITY_EDITOR
         public void Load(Data.Character data)
@@ -31,7 +34,6 @@ namespace Arknights
             skinIdx = 0; //暂时只有一套衣服
             loadData = data;
             int skinNum = loadData.avatar_name.Length;
-
 
             avatarURLs = new string[skinNum];
             dragImgURLs = new string[skinNum];
@@ -65,5 +67,10 @@ namespace Arknights
             skills = list.ToArray();
         }
 #endif
+        public void 下场()
+        {
+            skeletonAnimation.AnimationName = "Start";
+            
+        }
     }
 }

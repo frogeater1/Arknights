@@ -41,6 +41,7 @@ Shader "FairyGUI/Image"
 
         Cull Off
         Lighting Off
+        ZTest Always
         ZWrite Off
         Fog { Mode Off }
         Blend [_BlendSrcFactor] [_BlendDstFactor], One One

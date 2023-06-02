@@ -11,6 +11,9 @@ namespace Arknights
         private Vector2 origin;
         private Vector2 startPos;
 
+        private bool canSet;
+        private bool moving;
+
         public override bool selected
         {
             get { return base.selected; }
@@ -23,11 +26,15 @@ namespace Arknights
                 {
                     Game.Instance.ui_battle.ShowStats(true, character);
                     Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, -3));
+                     
+                    Map.Instance.curCharacter = character;
                 }
                 else
                 {
                     Game.Instance.ui_battle.ShowStats(false);
                     Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, 0));
+                    
+                    Map.Instance.curCharacter = null;
                 }
             }
         }
@@ -60,12 +67,13 @@ namespace Arknights
             m_drager.SetXY(startXY.x, startXY.y);
             m_drager.url = character.dragImgURLs[character.skinIdx];
             m_drager.visible = true;
-            
-            Game.Instance.ui_battle.m_card_list.selectedIndex = idx;
+            moving = false;
         }
 
         private void __touchMove(EventContext context)
         {
+            Debug.Log("moving");
+            moving = true;
             //拖拽逻辑
             InputEvent evt = context.inputEvent;
             Vector2 move = evt.position - startPos;
@@ -73,11 +81,12 @@ namespace Arknights
 
 
             //业务逻辑
+            Game.Instance.ui_battle.m_card_list.selectedIndex = idx;
             var ray = Game.Instance.CameraManager.mainCamera.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out var hit);
             Vector3 pos = Game.Instance.CameraManager.mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, hit.distance));
             //修正生成位置为格子正中间
-            var can_set = false;
+            canSet = false;
             if (pos.y < 10) //用这个判断是否打到可部署范围内，因为非可部署范围没有collider,会返回相机附近的位置。
             {
                 var setType = character.loadData.部署类型;
@@ -91,19 +100,18 @@ namespace Arknights
                 {
                     m_drager.visible = false;
                     character.transform.position = pos_fixed;
-                    can_set = true;
-                    Map.Instance.ShowAttackRange(character);
+                    canSet = true;
+                    Map.Instance.ShowAttackRange();
                 }
             }
             
-            if (!can_set)
+            if (!canSet)
             {
                 m_drager.visible = true;
                 character.transform.position = new Vector3(1000, 0, 0);
                 Map.Instance.HideAttackRange();
             }
-
-
+            
             // Game.Instance.CameraManager.mainCamera.ScreenToWorldPoint(new Vector3())
         }
 
@@ -111,6 +119,19 @@ namespace Arknights
         {
             m_drager.SetXY(origin.x,origin.y);
             m_drager.visible = false;
+            Map.Instance.HideAttackRange();
+            if (canSet)
+            {
+                Game.Instance.ui_directionSelect.Show();
+            }
+            else
+            {
+                Game.Instance.ui_directionSelect.Hide();
+                if (moving)
+                {
+                    Game.Instance.ui_battle.m_card_list.selectedIndex = -1;
+                }
+            }
         }
     }
 }

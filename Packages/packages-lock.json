@@ -7,13 +7,30 @@
       "dependencies": {},
       "hash": "f2773f585e762480c835ac718b82b87cb111e500"
     },
-    "com.esotericsoftware.spine.urp-shaders": {
-      "version": "file:C:/Users/frogeater/code/untiyProjects/demo4/com.esotericsoftware.spine.urp-shaders-3.8-2019.3",
+    "com.esotericsoftware.spine.spine-csharp": {
+      "version": "https://github.com/EsotericSoftware/spine-runtimes.git?path=spine-csharp/src#4.1",
       "depth": 0,
-      "source": "local",
+      "source": "git",
+      "dependencies": {},
+      "hash": "ea1f8021d947b0a3c741cd98eee539a86d7b0ac9"
+    },
+    "com.esotericsoftware.spine.spine-unity": {
+      "version": "https://github.com/EsotericSoftware/spine-runtimes.git?path=spine-unity/Assets/Spine#4.1",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.esotericsoftware.spine.spine-csharp": "4.1.0"
+      },
+      "hash": "ea1f8021d947b0a3c741cd98eee539a86d7b0ac9"
+    },
+    "com.esotericsoftware.spine.urp-shaders": {
+      "version": "https://github.com/EsotericSoftware/spine-runtimes.git?path=spine-unity/Modules/com.esotericsoftware.spine.urp-shaders#4.1",
+      "depth": 0,
+      "source": "git",
       "dependencies": {
         "com.unity.render-pipelines.universal": "7.1.5"
-      }
+      },
+      "hash": "ea1f8021d947b0a3c741cd98eee539a86d7b0ac9"
     },
     "com.unity.burst": {
       "version": "1.8.4",

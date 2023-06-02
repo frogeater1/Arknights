@@ -15,7 +15,7 @@ namespace Arknights
         public void DoRotation(Vector3 r)
         {
             //dotween移动相机
-            mainCamera.transform.DORotate(r, 0.1f);
+            mainCamera.transform.rotation = Quaternion.Euler(r);
         }
     }
 }

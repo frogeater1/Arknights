@@ -147,7 +147,7 @@ namespace FairyGUI
                 CreateCamera(Name, 1 << layer);
             }
 
-            HitTestContext.cachedMainCamera = Camera.main;
+            HitTestContext.cachedMainCamera = main;
         }
 
         /// <summary>
