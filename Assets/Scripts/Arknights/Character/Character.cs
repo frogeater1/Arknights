@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FairyGUI;
+using Spine.Unity;
 using UnityEditor;
 using UnityEngine;
 
@@ -40,6 +41,13 @@ namespace Arknights
                 avatarURLs[i] = UIPackage.GetItemURL("Arknights", loadData.avatar_name[i]);
                 dragImgURLs[i] = UIPackage.GetItemURL("Arknights", loadData.drag_img_name[i]);
                 tachieURLs[i] = UIPackage.GetItemURL("Arknights", loadData.tachie_name[i]);
+                var sda = AssetDatabase.LoadAssetAtPath<SkeletonDataAsset>($"Assets/Prefabs/Spines/{loadData.spine_path_正面[i]}.asset");
+                var sa = SkeletonAnimation.NewSkeletonAnimationGameObject(sda);
+                sa.AnimationName = "Idle";
+                sa.transform.localPosition = new Vector3(0, 0, 0);
+                sa.transform.rotation = Quaternion.Euler(60, 0, 0);
+                sa.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+                sa.transform.SetParent(transform);
             }
 
 
