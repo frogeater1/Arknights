@@ -28,6 +28,7 @@ namespace Arknights
             UIObjectFactory.SetPackageItemExtension(UI_ProgressBar1.URL, typeof(UI_ProgressBar1));
             UIObjectFactory.SetPackageItemExtension(UI_Button_角色卡.URL, typeof(UI_Button_角色卡));
             UIObjectFactory.SetPackageItemExtension(UI_Loading.URL, typeof(UI_Loading));
+            UIObjectFactory.SetPackageItemExtension(UI_Drag.URL, typeof(UI_Drag));
         }
     }
 }
