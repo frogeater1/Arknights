@@ -8,6 +8,9 @@ namespace Arknights
         public int idx;
         public Character character;
 
+        private Vector2 origin;
+        private Vector2 startPos;
+
         public override bool selected
         {
             get { return base.selected; }
@@ -19,21 +22,22 @@ namespace Arknights
                 if (value)
                 {
                     Game.Instance.ui_battle.ShowStats(true, character);
-                    // Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, -3));
+                    Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, -3));
                 }
                 else
                 {
                     Game.Instance.ui_battle.ShowStats(false);
-                    // Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, 0));
+                    Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, 0));
                 }
             }
         }
 
         partial void Init()
         {
-            onDragStart.Add(OnDragStart);
+            onTouchBegin.Add(__touchBegin);
+            onTouchMove.Add(__touchMove);
+            onTouchEnd.Add(__touchEnd);
             changeStateOnClick = false;
-            draggable = true;
         }
 
         public void Render(int index)
@@ -44,14 +48,69 @@ namespace Arknights
             m_职业icon.SetSelectedPage(character.loadData.职业.ToString());
             // m_elite_lv.icon = character.eliteURLs;
             m_cost.text = character.loadData.部署费用.ToString();
+            
+            origin =   m_drager.TransformPoint(new Vector2(-15,-15),Game.Instance.ui_battle);
         }
 
-
-        void OnDragStart(EventContext context)
+        private void __touchBegin(EventContext context)
         {
-            context.PreventDefault();
+            InputEvent evt = context.inputEvent;
+            startPos = evt.position;
+            var startXY = startPos - origin;
+            m_drager.SetXY(startXY.x, startXY.y);
+            m_drager.url = character.dragImgURLs[character.skinIdx];
+            m_drager.visible = true;
+            
             Game.Instance.ui_battle.m_card_list.selectedIndex = idx;
-            DragDropManager.inst.StartDrag(this, character.dragImgURLs[character.skinIdx], null);
+        }
+
+        private void __touchMove(EventContext context)
+        {
+            //拖拽逻辑
+            InputEvent evt = context.inputEvent;
+            Vector2 move = evt.position - startPos;
+            m_drager.SetXY(Mathf.RoundToInt(move.x), Mathf.RoundToInt(move.y));
+
+
+            //业务逻辑
+            var ray = Game.Instance.CameraManager.mainCamera.ScreenPointToRay(Input.mousePosition);
+            Physics.Raycast(ray, out var hit);
+            Vector3 pos = Game.Instance.CameraManager.mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, hit.distance));
+            //修正生成位置为格子正中间
+            var can_set = false;
+            if (pos.y < 10) //用这个判断是否打到可部署范围内，因为非可部署范围没有collider,会返回相机附近的位置。
+            {
+                var setType = character.loadData.部署类型;
+                var fixed_x = Mathf.FloorToInt(pos.x);
+                var fixed_z = Mathf.FloorToInt(pos.z);
+                var pos_fixed = new Vector3(fixed_x + 0.5f, 0, fixed_z + 0.2f);
+                var grid_type = Map.Instance.GetGridType(fixed_x, fixed_z);
+                if ((setType == 部署类型.地面 && grid_type == GridType.站人地面)
+                    || (setType == 部署类型.高台 && grid_type == GridType.站人高台)
+                    || (setType == 部署类型.Both && (grid_type == GridType.站人地面 || grid_type == GridType.站人高台)))
+                {
+                    m_drager.visible = false;
+                    character.transform.position = pos_fixed;
+                    can_set = true;
+                    Map.Instance.ShowAttackRange(character);
+                }
+            }
+            
+            if (!can_set)
+            {
+                m_drager.visible = true;
+                character.transform.position = new Vector3(1000, 0, 0);
+                Map.Instance.HideAttackRange();
+            }
+
+
+            // Game.Instance.CameraManager.mainCamera.ScreenToWorldPoint(new Vector3())
+        }
+
+        private void __touchEnd(EventContext context)
+        {
+            m_drager.SetXY(origin.x,origin.y);
+            m_drager.visible = false;
         }
     }
 }
