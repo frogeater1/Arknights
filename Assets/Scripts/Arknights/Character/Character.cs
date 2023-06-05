@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using FairyGUI;
 using Spine.Unity;
 using UnityEditor;
@@ -44,12 +45,12 @@ namespace Arknights
                 dragImgURLs[i] = UIPackage.GetItemURL("Arknights", loadData.drag_img_name[i]);
                 tachieURLs[i] = UIPackage.GetItemURL("Arknights", loadData.tachie_name[i]);
                 var sda = AssetDatabase.LoadAssetAtPath<SkeletonDataAsset>($"Assets/Prefabs/Spines/{loadData.spine_path_正面[i]}.asset");
-                var sa = SkeletonAnimation.NewSkeletonAnimationGameObject(sda);
-                sa.AnimationName = "Idle";
-                sa.transform.localPosition = new Vector3(0, 0, 0);
-                sa.transform.rotation = Quaternion.Euler(60, 0, 0);
-                sa.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-                sa.transform.SetParent(transform);
+                skeletonAnimation = SkeletonAnimation.NewSkeletonAnimationGameObject(sda);
+                skeletonAnimation.AnimationName = "Idle";
+                skeletonAnimation.transform.localPosition = new Vector3(0, 0, 0);
+                skeletonAnimation.transform.rotation = Quaternion.Euler(60, 0, 0);
+                skeletonAnimation.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+                skeletonAnimation.transform.SetParent(transform);
             }
 
 
@@ -70,7 +71,13 @@ namespace Arknights
         public void 下场()
         {
             skeletonAnimation.AnimationName = "Start";
-            
+            skeletonAnimation.state.SetAnimation(0,"Start",false);
+            //播放完毕后切到idle
+            skeletonAnimation.state.Complete += (trackEntry) =>
+            {
+                skeletonAnimation.AnimationName = "Idle";
+                skeletonAnimation.state.SetAnimation(0,"Idle",true);
+            };
         }
     }
 }

@@ -26,15 +26,11 @@ namespace Arknights
                 {
                     Game.Instance.ui_battle.ShowStats(true, character);
                     Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, -3));
-                     
-                    Map.Instance.curCharacter = character;
                 }
                 else
                 {
                     Game.Instance.ui_battle.ShowStats(false);
                     Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, 0));
-                    
-                    Map.Instance.curCharacter = null;
                 }
             }
         }
@@ -55,8 +51,8 @@ namespace Arknights
             m_职业icon.SetSelectedPage(character.loadData.职业.ToString());
             // m_elite_lv.icon = character.eliteURLs;
             m_cost.text = character.loadData.部署费用.ToString();
-            
-            origin =   m_drager.TransformPoint(new Vector2(-15,-15),Game.Instance.ui_battle);
+
+            origin = m_drager.TransformPoint(new Vector2(-15, -15), Game.Instance.ui_battle);
         }
 
         private void __touchBegin(EventContext context)
@@ -72,7 +68,6 @@ namespace Arknights
 
         private void __touchMove(EventContext context)
         {
-            Debug.Log("moving");
             moving = true;
             //拖拽逻辑
             InputEvent evt = context.inputEvent;
@@ -101,33 +96,32 @@ namespace Arknights
                     m_drager.visible = false;
                     character.transform.position = pos_fixed;
                     canSet = true;
-                    Map.Instance.ShowAttackRange();
+                    Map.Instance.attackRange.Show();
                 }
             }
-            
+
             if (!canSet)
             {
                 m_drager.visible = true;
                 character.transform.position = new Vector3(1000, 0, 0);
-                Map.Instance.HideAttackRange();
+                Map.Instance.attackRange.Hide();
             }
-            
-            // Game.Instance.CameraManager.mainCamera.ScreenToWorldPoint(new Vector3())
         }
 
         private void __touchEnd(EventContext context)
         {
-            m_drager.SetXY(origin.x,origin.y);
+            m_drager.SetXY(origin.x, origin.y);
             m_drager.visible = false;
-            Map.Instance.HideAttackRange();
+            Map.Instance.attackRange.Hide();
             if (canSet)
             {
-                Game.Instance.ui_directionSelect.Show();
+                Game.Instance.ui_directionSelect.m_option.SetSelectedPage(方向.取消.ToString());
+                Game.Instance.ui_directionSelect.visible = true;
             }
             else
             {
-                Game.Instance.ui_directionSelect.Hide();
-                if (moving)
+                Game.Instance.ui_directionSelect.visible = false;
+                if (moving) //这里是为了解决和click同时触发的问题
                 {
                     Game.Instance.ui_battle.m_card_list.selectedIndex = -1;
                 }

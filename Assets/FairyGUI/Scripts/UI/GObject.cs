@@ -919,7 +919,7 @@ namespace FairyGUI
         /// <summary>
         /// The visibility of the object. An invisible object will be untouchable.
         /// </summary>
-        public bool visible
+        public virtual bool visible
         {
             get
             {

@@ -8,13 +8,19 @@ namespace Arknights
         partial void Init()
         {
             Game.Instance.ui_battle = this;
-        
+            EventManager.CancelSelect += OnCancelSelect;
+            
             m_stats.visible = false;
             m_card_list.itemRenderer = RenderCard;
             m_card_list.numItems = 2;
             m_card_list.ResizeToFit();
         }
-        
+
+        private void OnCancelSelect()
+        {
+            m_card_list.selectedIndex = -1;
+        }
+
         private void RenderCard(int index, GObject obj)
         {
             UI_Button_角色卡 button = (UI_Button_角色卡)obj;

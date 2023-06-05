@@ -11,8 +11,7 @@ namespace Arknights
         
         private void Click()
         {
-            Game.Instance.ui_battle.m_card_list.selectedIndex = -1;
-            Game.Instance.ui_directionSelect.Hide();
+            EventManager.CallCancelSelect();
         }
     }
 }

@@ -113,7 +113,7 @@ MonoBehaviour:
   disableRenderingOnOverride: 1
   updateTiming: 1
   unscaledTime: 0
-  _animationName: Idle
+  _animationName: 
   loop: 0
   timeScale: 1
 --- !u!33 &8436898907773494048
@@ -152,6 +152,11 @@ PrefabInstance:
       propertyPath: "loadData.\u9632\u5FA1"
       value: 57
       objectReference: {fileID: 0}
+    - target: {fileID: -5162368791788645039, guid: edb2e07cc16d6aa44b47032c770b3393,
+        type: 3}
+      propertyPath: skeletonAnimation
+      value: 
+      objectReference: {fileID: 5239353510414530327}
     - target: {fileID: -5162368791788645039, guid: edb2e07cc16d6aa44b47032c770b3393,
         type: 3}
       propertyPath: skills.Array.size

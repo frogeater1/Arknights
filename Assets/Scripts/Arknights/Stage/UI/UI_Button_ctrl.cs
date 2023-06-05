@@ -35,32 +35,27 @@ namespace Arknights
             var newPos = center + (move.magnitude < radiusLimit ? move : move.normalized * radiusLimit);
             this.SetXY(Mathf.RoundToInt(newPos.x), Mathf.RoundToInt(newPos.y));
 
-            
+
             //业务逻辑
             if (move.magnitude < radiusCancel)
             {
-                Game.Instance.ui_directionSelect.m_option.selectedPage = "取消";
-                Map.Instance.HideAttackRange();
+                EventManager.CallChangeDirection( 方向.取消);
             }
             else if (Vector2.Angle(new Vector2(1, 0), move) < 45f)
             {
-                Game.Instance.ui_directionSelect.m_option.selectedPage = "右";
-                Map.Instance.ShowAttackRange(0);
+                EventManager.CallChangeDirection(方向.右);
             }
             else if (Vector2.Angle(new Vector2(0, 1), move) < 45f)
             {
-                Game.Instance.ui_directionSelect.m_option.selectedPage = "下";
-                Map.Instance.ShowAttackRange(90);
+                EventManager.CallChangeDirection(方向.下);
             }
             else if (Vector2.Angle(new Vector2(-1, 0), move) < 45f)
             {
-                Game.Instance.ui_directionSelect.m_option.selectedPage = "左";
-                Map.Instance.ShowAttackRange(180);
+                EventManager.CallChangeDirection(方向.左);
             }
             else if (Vector2.Angle(new Vector2(0, -1), move) < 45f)
             {
-                Game.Instance.ui_directionSelect.m_option.selectedPage = "上";
-                Map.Instance.ShowAttackRange(270);
+                EventManager.CallChangeDirection(方向.上);
             }
         }
 
@@ -74,7 +69,9 @@ namespace Arknights
 
             if (Game.Instance.ui_directionSelect.m_option.selectedPage != "取消")
             {
-                Map.Instance.curCharacter.下场();
+                Game.Instance.curCharacter.下场();
+                //要先下场,否则选中卡片会被清除后找不到当前角色
+                EventManager.CallCancelSelect();
             }
         }
     }
