@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4355221903659752949}
-  - component: {fileID: 8436898907773494048}
   - component: {fileID: 1849832980809041918}
   - component: {fileID: 5239353510414530327}
+  - component: {fileID: 8436898907773494048}
   m_Layer: 0
   m_Name: New Spine GameObject
   m_TagString: Untagged
@@ -34,14 +34,6 @@ Transform:
   m_Father: {fileID: 4603948672408753477}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8436898907773494048
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3407505217948617917}
-  m_Mesh: {fileID: 0}
 --- !u!23 &1849832980809041918
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -98,6 +90,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonDataAsset: {fileID: 11400000, guid: 472f997678fff284eac80005ab6fca06, type: 2}
   initialSkinName: 
+  fixPrefabOverrideViaMeshFilter: 2
   initialFlipX: 0
   initialFlipY: 0
   updateWhenInvisible: 3
@@ -118,9 +111,19 @@ MonoBehaviour:
     materialsInsideMask: []
     materialsOutsideMask: []
   disableRenderingOnOverride: 1
+  updateTiming: 1
+  unscaledTime: 0
   _animationName: Idle
   loop: 0
   timeScale: 1
+--- !u!33 &8436898907773494048
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3407505217948617917}
+  m_Mesh: {fileID: 0}
 --- !u!1001 &5970994820522120162
 PrefabInstance:
   m_ObjectHideFlags: 0
