@@ -26,7 +26,9 @@ namespace Arknights
         //tmp 当前在用哪套皮肤
         public int skinIdx;
         
-        
+        //之前是朝左还是朝右,不保存上下,默认朝右
+        private 方向 oldDir = 方向.右;
+
         public SkeletonAnimation skeletonAnimation;
 
 #if UNITY_EDITOR
@@ -68,6 +70,41 @@ namespace Arknights
             skills = list.ToArray();
         }
 #endif
+
+
+        private void OnEnable()
+        {
+            EventManager.ChangeDirection += OnChangeDirection;
+        }
+
+        private void OnDisable()
+        {
+            EventManager.ChangeDirection -= OnChangeDirection;
+        }
+
+        private void OnChangeDirection(方向 dir)
+        {
+            switch (dir)
+            {
+                case 方向.右:
+                    skeletonAnimation.skeleton.ScaleX = 1;
+                    oldDir = dir;
+                    break;
+                case 方向.左:
+                    oldDir = dir;
+                    skeletonAnimation.skeleton.ScaleX = -1;
+                    break;
+                case 方向.上:
+                    //切换成背面的spine，暂时只有正面的
+                    skeletonAnimation.skeleton.ScaleX = oldDir == 方向.右 ? 1 : -1;
+                    break;
+                case 方向.下:
+                    skeletonAnimation.skeleton.ScaleX = oldDir == 方向.右 ? 1 : -1;
+                    break;
+            }
+        }
+
+
         public void 下场()
         {
             skeletonAnimation.AnimationName = "Start";

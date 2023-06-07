@@ -20,8 +20,12 @@ namespace Arknights
             set
             {
                 base.selected = value;
-                Map.Instance.decal_地面.SetActive(value && (character.loadData.部署类型 == 部署类型.地面 || character.loadData.部署类型 == 部署类型.Both));
-                Map.Instance.decal_高台.SetActive(value && (character.loadData.部署类型 == 部署类型.高台 || character.loadData.部署类型 == 部署类型.Both));
+                Map.Instance.decal_地面.SetActive(value &&
+                                                (character.loadData.部署类型 == 部署类型.地面 ||
+                                                 character.loadData.部署类型 == 部署类型.Both));
+                Map.Instance.decal_高台.SetActive(value &&
+                                                (character.loadData.部署类型 == 部署类型.高台 ||
+                                                 character.loadData.部署类型 == 部署类型.Both));
                 if (value)
                 {
                     Game.Instance.ui_battle.ShowStats(true, character);
@@ -79,7 +83,9 @@ namespace Arknights
             Game.Instance.ui_battle.m_card_list.selectedIndex = idx;
             var ray = Game.Instance.CameraManager.mainCamera.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out var hit);
-            Vector3 pos = Game.Instance.CameraManager.mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, hit.distance));
+            Vector3 pos =
+                Game.Instance.CameraManager.mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+                    Input.mousePosition.y, hit.distance));
             //修正生成位置为格子正中间
             canSet = false;
             if (pos.y < 10) //用这个判断是否打到可部署范围内，因为非可部署范围没有collider,会返回相机附近的位置。
@@ -87,8 +93,8 @@ namespace Arknights
                 var setType = character.loadData.部署类型;
                 var fixed_x = Mathf.FloorToInt(pos.x);
                 var fixed_z = Mathf.FloorToInt(pos.z);
-                var pos_fixed = new Vector3(fixed_x + 0.5f, 0, fixed_z + 0.2f);
                 var grid_type = Map.Instance.GetGridType(fixed_x, fixed_z);
+                var pos_fixed = new Vector3(fixed_x + 0.5f, grid_type == GridType.站人高台 ? 0.6f : 0, fixed_z + 0.2f);
                 if ((setType == 部署类型.地面 && grid_type == GridType.站人地面)
                     || (setType == 部署类型.高台 && grid_type == GridType.站人高台)
                     || (setType == 部署类型.Both && (grid_type == GridType.站人地面 || grid_type == GridType.站人高台)))
@@ -115,8 +121,8 @@ namespace Arknights
             Map.Instance.attackRange.Hide();
             if (canSet)
             {
-                Game.Instance.ui_directionSelect.m_option.SetSelectedPage(方向.取消.ToString());
                 Game.Instance.ui_directionSelect.visible = true;
+                Game.Instance.ui_directionSelect.m_option.SetSelectedPage(方向.取消.ToString());
             }
             else
             {

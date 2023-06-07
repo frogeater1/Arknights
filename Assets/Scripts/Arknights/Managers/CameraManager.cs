@@ -10,6 +10,7 @@ namespace Arknights
         public void Init()
         {
             mainCamera = Camera.main;
+            mainCamera!.depthTextureMode = DepthTextureMode.Depth;
         }
 
         public void DoRotation(Vector3 r)

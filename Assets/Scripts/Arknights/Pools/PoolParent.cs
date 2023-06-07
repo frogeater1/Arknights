@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEditor.Animations;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Pool;
 
 namespace Arknights.Pools

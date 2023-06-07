@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Arknights;
-using Arknights.Pools;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Pool;
 
 public class Map : Singleton<Map>, ILoadable
 {
     public GameObject decal_地面;
     public GameObject decal_高台;
-    
+
     public AttackRange attackRange;
-    
+
 
     [SerializeField]
     private GridType[] gridData;
@@ -32,9 +27,13 @@ public class Map : Singleton<Map>, ILoadable
         height = h;
     }
 #endif
-    
-    public GridType GetGridType(int x, int z)
+
+    public GridType? GetGridType(int x, int z)
     {
+        if (x < 0 || x >= width || z < 0 || z >= height)
+        {
+            return null;
+        }
         //example: (1,6)=> (height - z - 1,x)=>(2,1) => 19
         return gridData[(height - z - 1) * width + x];
     }

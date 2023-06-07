@@ -15,11 +15,18 @@ namespace Arknights
         private void OnEnable()
         {
             EventManager.ChangeDirection += OnChangeDirection;
+            EventManager.CancelSelect += OnCancelSelect;
         }
 
         private void OnDisable()
         {
             EventManager.ChangeDirection -= OnChangeDirection;
+            EventManager.CancelSelect -= OnCancelSelect;
+        }
+
+        private void OnCancelSelect()
+        {
+            Hide();
         }
 
         private void OnChangeDirection(方向 direction)

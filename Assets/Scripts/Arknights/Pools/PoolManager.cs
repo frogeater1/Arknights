@@ -21,14 +21,5 @@ namespace Arknights
             poolParents[i].CreatePool(prefabs[i]);
         }
     }
- 
-    public PoolParent GetPool(PoolType type)
-    {
-        return type switch
-        {
-            PoolType.攻击范围 => pools[0],
-            _ => null
-        };
-    }
 }
 }
