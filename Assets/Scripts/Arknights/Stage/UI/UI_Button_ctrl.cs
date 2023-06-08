@@ -10,6 +10,9 @@ namespace Arknights
         public Vector2 center;
         public Vector2 startPos;
 
+
+        public 方向? oldDir;
+
         partial void Init()
         {
             //私有方法不继承
@@ -24,6 +27,7 @@ namespace Arknights
             startPos = evt.position;
             draggingObject = this;
             // context.CaptureTouch();
+            oldDir = null;
         }
 
         private void __touchMove(EventContext context)
@@ -36,25 +40,31 @@ namespace Arknights
 
 
             //业务逻辑
+            方向 dir = 方向.取消;
             if (move.magnitude < radiusCancel)
             {
-                EventManager.CallChangeDirection( 方向.取消);
+                dir = 方向.取消;
             }
             else if (Vector2.Angle(new Vector2(1, 0), move) < 45f)
             {
-                EventManager.CallChangeDirection(方向.右);
+                dir = 方向.右;
             }
             else if (Vector2.Angle(new Vector2(0, 1), move) < 45f)
             {
-                EventManager.CallChangeDirection(方向.下);
+                dir = 方向.下;
             }
             else if (Vector2.Angle(new Vector2(-1, 0), move) < 45f)
             {
-                EventManager.CallChangeDirection(方向.左);
+                dir = 方向.左;
             }
             else if (Vector2.Angle(new Vector2(0, -1), move) < 45f)
             {
-                EventManager.CallChangeDirection(方向.上);
+                dir = 方向.上;
+            }
+
+            if (dir != oldDir)
+            {
+                EventManager.CallChangeDirection(dir);
             }
         }
 

@@ -57,8 +57,9 @@ namespace Arknights
         {
             Character curCharacter = Game.Instance.curCharacter;
             transform.localRotation = Quaternion.Euler(0, rotation, 0);
-            transform.localPosition = new Vector3(curCharacter.transform.localPosition.x, 0.03f, Mathf.Floor(curCharacter.transform.localPosition.z) + 0.5f);
-    
+            transform.localPosition = new Vector3(curCharacter.transform.localPosition.x, 0.03f,
+                Mathf.Floor(curCharacter.transform.localPosition.z) + 0.5f);
+
             if (grids != null)
             {
                 foreach (var grid in grids)
@@ -70,7 +71,20 @@ namespace Arknights
             foreach (var range in curCharacter.attackRange)
             {
                 var grid = pool.Get();
+
+
                 grid.transform.localPosition = new Vector3(range.x, 0, range.y);
+                var position = grid.transform.position;
+                var grid_type = Map.Instance.GetGridType(Mathf.FloorToInt(position.x),
+                    Mathf.FloorToInt(position.z));
+
+                if (grid_type == GridType.不站人高台 || grid_type == GridType.站人高台)
+                {
+                    var localPosition = grid.transform.localPosition;
+                    grid.transform.localPosition = new Vector3(localPosition.x, 0.63f,
+                        localPosition.z);
+                }
+
                 grids.Add(grid);
             }
         }
