@@ -13,6 +13,7 @@ namespace Arknights
 
         private bool canSet;
         private bool moving;
+        // private Vector2Int oldGridPos = new(-1, -1); //缓存上一次的格子坐标，如果没变就不做后面的操作了
 
         public override bool selected
         {
@@ -86,15 +87,21 @@ namespace Arknights
             Vector3 pos =
                 Game.Instance.CameraManager.mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
                     Input.mousePosition.y, hit.distance));
-            //修正生成位置为格子正中间
+
             canSet = false;
             if (pos.y < 10) //用这个判断是否打到可部署范围内，因为非可部署范围没有collider,会返回相机附近的位置。
             {
                 var setType = character.loadData.部署类型;
                 var fixed_x = Mathf.FloorToInt(pos.x);
                 var fixed_z = Mathf.FloorToInt(pos.z);
+                // if (fixed_x == oldGridPos.x && fixed_z == oldGridPos.y)
+                // {
+                //     //暂时不缓存优化，会让逻辑不清晰
+                //     return;
+                // }
                 var grid_type = Map.Instance.GetGridType(fixed_x, fixed_z);
                 var pos_fixed = new Vector3(fixed_x + 0.5f, grid_type == GridType.站人高台 ? 0.6f : 0, fixed_z + 0.2f);
+                //修正生成位置为格子正中间
                 if ((setType == 部署类型.地面 && grid_type == GridType.站人地面)
                     || (setType == 部署类型.高台 && grid_type == GridType.站人高台)
                     || (setType == 部署类型.Both && (grid_type == GridType.站人地面 || grid_type == GridType.站人高台)))
