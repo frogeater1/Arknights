@@ -37,4 +37,10 @@ public class Map : Singleton<Map>, ILoadable
         //example: (1,6)=> (height - z - 1,x)=>(2,1) => 19
         return gridData[(height - z - 1) * width + x];
     }
+
+    // //检查这个格子上有没有角色
+    // public object CheckGrid(Vector2Int logicGrid, CharacterType type)
+    // {
+    //     
+    // }
 }

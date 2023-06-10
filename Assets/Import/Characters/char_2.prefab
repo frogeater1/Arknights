@@ -485,6 +485,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83eeca4de19441e9a590a98f998cf850, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadData:
+    id: 102
+    name: "\u8FDC\u7A0B\u5355\u4F53\u666E\u653B"
+    script: "Arknights.Skills.\u4E3B\u52A8"
+    icon_name: skill_icon_skchr_texas_2
+    auto: 1
+    auto_time: 1
+    range_type: 3
+    range_id: 
+    change_attribute: 
+    fixed_value: 0
+    percentage_value: 0
+    ext_value_1: 0
+    start_e: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+    cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
+    durantion: []
+  iconURL: ui://wnbsox0hnnfh4i
+  curE: 0
+  level: 0
 --- !u!114 &8743790001106319012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,6 +516,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f47c7068c0b147239a1b3ab574a6694c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadData:
+    id: 211
+    name: "\u5FEB\u901F\u5F39\u5323"
+    script: "Arknights.Skills.\u88AB\u52A8"
+    icon_name: skill_icon_skchr_texas_2
+    auto: 0
+    auto_time: 0
+    range_type: 1
+    range_id: 
+    change_attribute: "\u653B\u51FB\u95F4\u9694"
+    fixed_value: 0
+    percentage_value: -0.06
+    ext_value_1: 0
+    start_e: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+    cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
+    durantion: []
+  iconURL: ui://wnbsox0hnnfh4i
 --- !u!114 &6172985199386054428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,6 +545,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83eeca4de19441e9a590a98f998cf850, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadData:
+    id: 212
+    name: "\u5929\u4F7F\u7684\u795D\u798F"
+    script: "Arknights.Skills.\u4E3B\u52A8"
+    icon_name: skill_icon_skchr_texas_2
+    auto: 1
+    auto_time: 3
+    range_type: 5
+    range_id: 
+    change_attribute: 
+    fixed_value: 0
+    percentage_value: 0
+    ext_value_1: 0
+    start_e: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+    cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
+    durantion: []
+  iconURL: ui://wnbsox0hnnfh4i
+  curE: 0
+  level: 0
 --- !u!114 &3910390396142548003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -521,6 +576,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83eeca4de19441e9a590a98f998cf850, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadData:
+    id: 213
+    name: "\u8FC7\u8F7D"
+    script: "Arknights.Skills.\u4E3B\u52A8"
+    icon_name: skill_icon_skchr_angel_3
+    auto: 1
+    auto_time: 4
+    range_type: 1
+    range_id: 
+    change_attribute: 
+    fixed_value: 0
+    percentage_value: 0
+    ext_value_1: 0
+    start_e: 14000000140000001400000014000000140000001400000014000000140000001400000014000000
+    cost_e: 32000000300000002e0000002c0000002a000000280000002600000024000000220000001e000000
+    durantion:
+    - 15
+    - 15
+    - 15
+    - 15
+    - 15
+    - 15
+    - 15
+    - 15
+    - 15
+    - 15
+  iconURL: ui://wnbsox0hnnfh4j
+  curE: 0
+  level: 0
 --- !u!4 &4603948672408753477 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7870531606919055015, guid: edb2e07cc16d6aa44b47032c770b3393,

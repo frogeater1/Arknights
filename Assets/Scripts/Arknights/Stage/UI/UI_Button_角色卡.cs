@@ -29,6 +29,7 @@ namespace Arknights
                                                  character.loadData.部署类型 == 部署类型.Both));
                 if (value)
                 {
+                    Game.Instance.CharacterManager.curCharacter = this.character;
                     Game.Instance.ui_battle.ShowStats(true, character);
                     Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, -3));
                 }
@@ -92,24 +93,23 @@ namespace Arknights
             if (pos.y < 10) //用这个判断是否打到可部署范围内，因为非可部署范围没有collider,会返回相机附近的位置。
             {
                 var setType = character.loadData.部署类型;
-                var fixed_x = Mathf.FloorToInt(pos.x);
-                var fixed_z = Mathf.FloorToInt(pos.z);
+                var logic_x = Mathf.FloorToInt(pos.x);
+                var logic_z = Mathf.FloorToInt(pos.z);
                 // if (fixed_x == oldGridPos.x && fixed_z == oldGridPos.y)
                 // {
                 //     //暂时不缓存优化，会让逻辑不清晰
                 //     return;
                 // }
-                var grid_type = Map.Instance.GetGridType(fixed_x, fixed_z);
-                var pos_fixed = new Vector3(fixed_x + 0.5f, grid_type == GridType.站人高台 ? 0.6f : 0, fixed_z + 0.2f);
+                var grid_type = Map.Instance.GetGridType(logic_x, logic_z);
                 //修正生成位置为格子正中间
                 if ((setType == 部署类型.地面 && grid_type == GridType.站人地面)
                     || (setType == 部署类型.高台 && grid_type == GridType.站人高台)
                     || (setType == 部署类型.Both && (grid_type == GridType.站人地面 || grid_type == GridType.站人高台)))
                 {
                     m_drager.visible = false;
-                    character.transform.position = pos_fixed;
+                    character.FixedPos(logic_x, logic_z);
                     canSet = true;
-                    Map.Instance.attackRange.Show();
+                    Map.Instance.attackRange.Show(character);
                 }
             }
 
@@ -136,6 +136,7 @@ namespace Arknights
                 Game.Instance.ui_directionSelect.visible = false;
                 if (moving) //这里是为了解决和click同时触发的问题
                 {
+                    moving = false;
                     Game.Instance.ui_battle.m_card_list.selectedIndex = -1;
                 }
             }

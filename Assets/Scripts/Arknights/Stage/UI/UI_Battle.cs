@@ -19,6 +19,7 @@ namespace Arknights
         private void OnCancelSelect()
         {
             m_card_list.selectedIndex = -1;
+            Game.Instance.CharacterManager.curCharacter = null;
         }
 
         private void RenderCard(int index, GObject obj)

@@ -10,6 +10,7 @@ namespace Arknights
         public Vector2 center;
         public Vector2 startPos;
 
+        private bool moving;
 
         public 方向? oldDir;
 
@@ -28,11 +29,13 @@ namespace Arknights
             draggingObject = this;
             // context.CaptureTouch();
             oldDir = null;
+            moving = false;
         }
 
         private void __touchMove(EventContext context)
         {
             //移动逻辑
+            moving = true;
             InputEvent evt = (InputEvent)context.data;
             var move = evt.position - startPos;
             var newPos = center + (move.magnitude < radiusLimit ? move : move.normalized * radiusLimit);
@@ -64,12 +67,15 @@ namespace Arknights
 
             if (dir != oldDir)
             {
-                EventManager.CallChangeDirection(dir);
+                var character = Game.Instance.CharacterManager.curCharacter;
+                EventManager.CallChangeDirection(character, dir);
             }
         }
 
         private void __touchEnd(EventContext context)
         {
+            if (!moving) return;
+            moving = false;
             if (draggingObject == this)
             {
                 this.SetXY(center.x, center.y);
@@ -78,7 +84,7 @@ namespace Arknights
 
             if (Game.Instance.ui_directionSelect.m_option.selectedPage != "取消")
             {
-                Game.Instance.curCharacter.下场();
+                Game.Instance.CharacterManager.curCharacter.下场();
                 //要先下场,否则选中卡片会被清除后找不到当前角色
                 EventManager.CallCancelSelect();
             }

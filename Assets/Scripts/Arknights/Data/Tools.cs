@@ -79,7 +79,7 @@ namespace Arknights.Data
 
         private static void MakeCharacter()
         {
-            var prefab = AssetDatabase.LoadAssetAtPath<Arknights.Character>("Assets/Prefabs/character.prefab");
+            var prefab = AssetDatabase.LoadAssetAtPath<Arknights.Character>("Assets/Prefabs/Battle/character.prefab");
             foreach (var c in Character)
             {
                 var go = PrefabUtility.InstantiatePrefab(prefab) as Arknights.Character;

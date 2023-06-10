@@ -29,15 +29,15 @@ namespace Arknights
             Hide();
         }
 
-        private void OnChangeDirection(方向 direction)
+        private void OnChangeDirection(Character character, 方向 direction)
         {
             switch (direction)
             {
                 case 方向.取消: Hide(); break;
-                case 方向.右: Show(0); break;
-                case 方向.下: Show(90); break;
-                case 方向.左: Show(180); break;
-                case 方向.上: Show(270); break;
+                case 方向.右: Show(character,0); break;
+                case 方向.下: Show(character,90); break;
+                case 方向.左: Show(character,180); break;
+                case 方向.上: Show(character,270); break;
             }
         }
 
@@ -53,12 +53,11 @@ namespace Arknights
             Game.Instance.PoolManager.pools.Add(this);
         }
 
-        public void Show(int rotation = 0)
+        public void Show(Character character, int rotation = 0)
         {
-            Character curCharacter = Game.Instance.curCharacter;
             transform.localRotation = Quaternion.Euler(0, rotation, 0);
-            transform.localPosition = new Vector3(curCharacter.transform.localPosition.x, 0.03f,
-                Mathf.Floor(curCharacter.transform.localPosition.z) + 0.5f);
+            transform.localPosition = new Vector3(character.transform.localPosition.x, 0.03f,
+                Mathf.Floor(character.transform.localPosition.z) + 0.5f);
 
             if (grids != null)
             {
@@ -68,7 +67,7 @@ namespace Arknights
                 }
             }
             grids = new List<GameObject>();
-            foreach (var range in curCharacter.attackRange)
+            foreach (var range in character.attackRange)
             {
                 var grid = pool.Get();
 

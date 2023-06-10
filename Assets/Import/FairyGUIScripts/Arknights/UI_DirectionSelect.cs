@@ -16,6 +16,8 @@ namespace Arknights
         public GImage m_n10;
         public UI_Button_ctrl m_ctrl;
         public UI_Button_取消 m_n22;
+        public GImage m_n23;
+        public UI_Skill m_skill;
         public const string URL = "ui://wnbsox0hhl0g42";
 
         public static UI_DirectionSelect CreateInstance()
@@ -36,6 +38,8 @@ namespace Arknights
             m_n10 = (GImage)GetChildAt(4);
             m_ctrl = (UI_Button_ctrl)GetChildAt(5);
             m_n22 = (UI_Button_取消)GetChildAt(6);
+            m_n23 = (GImage)GetChildAt(7);
+            m_skill = (UI_Skill)GetChildAt(8);
             Init();
         }
         partial void Init();

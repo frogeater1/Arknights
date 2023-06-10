@@ -412,6 +412,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83eeca4de19441e9a590a98f998cf850, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadData:
+    id: 101
+    name: "\u8FD1\u6218\u5355\u4F53\u666E\u653B"
+    script: "Arknights.Skills.\u4E3B\u52A8"
+    icon_name: skill_icon_skchr_texas_2
+    auto: 1
+    auto_time: 1
+    range_type: 3
+    range_id: 
+    change_attribute: 
+    fixed_value: 0
+    percentage_value: 0
+    ext_value_1: 0
+    start_e: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+    cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
+    durantion: []
+  iconURL: ui://wnbsox0hnnfh4i
+  curE: 0
+  level: 0
 --- !u!114 &8172777638269005185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -424,6 +443,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f47c7068c0b147239a1b3ab574a6694c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadData:
+    id: 201
+    name: "\u6218\u672F\u5FEB\u9012"
+    script: "Arknights.Skills.\u88AB\u52A8"
+    icon_name: skill_icon_skchr_texas_2
+    auto: 0
+    auto_time: 2
+    range_type: 0
+    range_id: 
+    change_attribute: 
+    fixed_value: 0
+    percentage_value: 0
+    ext_value_1: 0
+    start_e: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+    cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
+    durantion: []
+  iconURL: ui://wnbsox0hnnfh4i
 --- !u!114 &6918256785717574013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,3 +472,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83eeca4de19441e9a590a98f998cf850, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadData:
+    id: 202
+    name: "\u5251\u96E8"
+    script: "Arknights.Skills.\u4E3B\u52A8"
+    icon_name: skill_icon_skchr_texas_2
+    auto: 0
+    auto_time: 0
+    range_type: 4
+    range_id: 3
+    change_attribute: 
+    fixed_value: 0
+    percentage_value: 0
+    ext_value_1: 1
+    start_e: 1400000015000000160000001700000018000000190000001a0000001b0000001c0000001e000000
+    cost_e: 28000000280000002800000028000000280000002800000028000000280000002800000028000000
+    durantion: []
+  iconURL: ui://wnbsox0hnnfh4i
+  curE: 0
+  level: 0

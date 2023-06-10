@@ -19,6 +19,9 @@ namespace Arknights
             UIObjectFactory.SetPackageItemExtension(UI_Button_blue.URL, typeof(UI_Button_blue));
             UIObjectFactory.SetPackageItemExtension(UI_DirectionSelect.URL, typeof(UI_DirectionSelect));
             UIObjectFactory.SetPackageItemExtension(UI_Button_ctrl.URL, typeof(UI_Button_ctrl));
+            UIObjectFactory.SetPackageItemExtension(UI_Button_escape.URL, typeof(UI_Button_escape));
+            UIObjectFactory.SetPackageItemExtension(UI_Button_Skill.URL, typeof(UI_Button_Skill));
+            UIObjectFactory.SetPackageItemExtension(UI_Skill.URL, typeof(UI_Skill));
             UIObjectFactory.SetPackageItemExtension(UI_Button_gray.URL, typeof(UI_Button_gray));
             UIObjectFactory.SetPackageItemExtension(UI_Button_设置.URL, typeof(UI_Button_设置));
             UIObjectFactory.SetPackageItemExtension(UI_Battle.URL, typeof(UI_Battle));
