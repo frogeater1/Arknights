@@ -53,7 +53,7 @@ namespace Arknights
         {
             visible = true;
             m_option.SetSelectedPage(方向.操作.ToString());
-            m_skill.Show(character.skills[character.skillIdx]);
+            m_skill.Show(character);
         }
         
     }

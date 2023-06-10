@@ -109,7 +109,7 @@ namespace Arknights
                     m_drager.visible = false;
                     character.FixedPos(logic_x, logic_z);
                     canSet = true;
-                    Map.Instance.attackRange.Show(character);
+                    Game.Instance.attackRange.Show(character);
                 }
             }
 
@@ -117,7 +117,7 @@ namespace Arknights
             {
                 m_drager.visible = true;
                 character.transform.position = new Vector3(1000, 0, 0);
-                Map.Instance.attackRange.Hide();
+                Game.Instance.attackRange.Hide();
             }
         }
 
@@ -125,7 +125,7 @@ namespace Arknights
         {
             m_drager.SetXY(origin.x, origin.y);
             m_drager.visible = false;
-            Map.Instance.attackRange.Hide();
+            Game.Instance.attackRange.Hide();
             if (canSet)
             {
                 Game.Instance.ui_directionSelect.visible = true;

@@ -8,9 +8,7 @@ namespace Arknights
 {
     public class AttackRange : PoolParent
     {
-        public PoolType pooltype = PoolType.攻击范围;
-
-        private List<GameObject> grids;
+        private List<GameObject> attackGrids;
 
         private void OnEnable()
         {
@@ -60,57 +58,54 @@ namespace Arknights
                 go => go.SetActive(false),
                 Destroy
             );
-            Game.Instance.PoolManager.pools.Add(this);
+            // Game.Instance.PoolManager.pools.Add(this);
         }
 
         public void Show(Character character, int rotation = 0)
         {
             transform.localRotation = Quaternion.Euler(0, rotation, 0);
-            transform.localPosition = new Vector3(character.transform.localPosition.x, 0.03f,
-                Mathf.Floor(character.transform.localPosition.z) + 0.5f);
+            transform.localPosition = new Vector3(character.transform.localPosition.x, 0.03f, Mathf.Floor(character.transform.localPosition.z) + 0.5f);
 
-            if (grids != null)
+            if (attackGrids != null)
             {
-                foreach (var grid in grids)
+                foreach (var g in attackGrids)
                 {
-                    pool.Release(grid);
+                    pool.Release(g);
                 }
             }
 
-            grids = new List<GameObject>();
+            attackGrids = new List<GameObject>();
             foreach (var range in character.attackRange)
             {
-                var grid = pool.Get();
+                var attack_grid = pool.Get();
 
-
-                grid.transform.localPosition = new Vector3(range.x, 0, range.y);
-                var position = grid.transform.position;
+                attack_grid.transform.localPosition = new Vector3(range.x, 0, range.y);
+                var position = attack_grid.transform.position;
                 var grid_type = Map.Instance.GetGrid(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.z))?.type;
                 if (grid_type == GridType.不站人高台 || grid_type == GridType.站人高台)
                 {
-                    var localPosition = grid.transform.localPosition;
-                    grid.transform.localPosition = new Vector3(localPosition.x, 0.53f,
-                        localPosition.z);
+                    var localPosition = attack_grid.transform.localPosition;
+                    attack_grid.transform.localPosition = new Vector3(localPosition.x, 0.53f, localPosition.z);
                 }
 
-                grids.Add(grid);
+                attackGrids.Add(attack_grid);
             }
         }
 
 
         public void Hide()
         {
-            if (grids == null)
+            if (attackGrids == null)
             {
                 return;
             }
 
-            foreach (var grid in grids)
+            foreach (var g in attackGrids)
             {
-                pool.Release(grid);
+                pool.Release(g);
             }
 
-            grids = null;
+            attackGrids = null;
         }
     }
 }

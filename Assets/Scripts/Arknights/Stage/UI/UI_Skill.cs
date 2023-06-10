@@ -7,9 +7,11 @@ namespace Arknights
     public partial class UI_Skill
     {
         public 主动 skill;
-        public void Show(Skill s)
+        public Character character;
+        public void Show(Character character)
         {
-            skill = (主动)s;
+            this.character = character;
+            skill = (主动)character.skills[character.skillIdx];
             m_skill_button.icon = skill.iconURL;
             Refresh();
         }
@@ -24,15 +26,15 @@ namespace Arknights
         {
             if (skill)
             {
-                var cost_E = skill.loadData.cost_e[skill.level - 1];
-                if (skill.curE >= cost_E)
+                var cost_Sp = skill.loadData.cost_e[skill.level - 1];
+                if (character.curSp >= cost_Sp)
                 {
                     m_ready.selectedPage = "ready";
                 }
                 else
                 {
                     m_ready.selectedPage = "loading";
-                    m_electricity.text = skill.curE + "/" + cost_E;
+                    m_electricity.text = character.curSp + "/" + cost_Sp;
                 }
             }
         }

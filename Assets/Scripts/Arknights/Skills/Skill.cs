@@ -7,17 +7,20 @@ namespace Arknights.Skills
     {
         public Data.Skill loadData;
         public string iconURL;
+
+        public int level;
+
+
         public abstract void Use(Unit target = null);
 
-#if  UNITY_EDITOR
-        
+#if UNITY_EDITOR
+
         public virtual void Load(Data.Skill skill)
         {
             iconURL = UIPackage.GetItemURL("Arknights", skill.icon_name);
             loadData = skill;
         }
 #endif
-
-        public abstract void Init();
+        
     }
 }

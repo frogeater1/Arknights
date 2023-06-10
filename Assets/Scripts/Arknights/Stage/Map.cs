@@ -9,9 +9,6 @@ public class Map : Singleton<Map>, ILoadable
     public GameObject decal_地面;
     public GameObject decal_高台;
 
-    public AttackRange attackRange;
-
-
     [SerializeField]
     private GridType[] gridData;
 

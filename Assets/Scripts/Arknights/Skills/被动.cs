@@ -6,10 +6,6 @@
         {
             
         }
-
-        public override void Init()
-        {
-            
-        }
+        
     }
 }

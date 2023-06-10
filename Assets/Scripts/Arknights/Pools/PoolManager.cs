@@ -12,7 +12,6 @@ namespace Arknights
     public PoolParent[] poolParents;
     public GameObject[] prefabs;
     
-    public List<PoolParent> pools;
 
     public void Init()
     {

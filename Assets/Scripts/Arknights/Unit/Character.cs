@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Arknights.Skills;
+using Arknights.UGUI;
 using Cysharp.Threading.Tasks;
 using FairyGUI;
 using Spine.Unity;
@@ -49,13 +50,21 @@ namespace Arknights
         //以下两个bool的作用是,移动时，不能正在普攻或放技能时且不能有攻击目标，普攻时，不能正在普攻或放技能，放技能时，不能正在放技能
         private bool isSkilling = false; //正在放技能中
         private bool isAttacking = false; //正在普攻中
-        private float skillTime = 0;
-        private float attackTime = 0;
 
         public Vector2Int logicPos;
 
-        private int curE;
+        public Skill curSkill;
+        public int curSp;
+        public int maxSp;
+        public int curHp;
+        public int maxHp;
+
         private Unit target;
+        public HpSpSlider hpspSlider;
+
+        public float spTiming = 0;
+        public float attackTiming = 0;
+        public float skillTiming = 0;
 
 
 #if UNITY_EDITOR
@@ -155,7 +164,16 @@ namespace Arknights
             }
 
             attackDuration = loadData.攻击间隔;
+
             skeletonAnimation.skeleton.Data.FindAnimation(loadData.attack_anim_name).Duration = attackDuration;
+
+            maxHp = loadData.生命上限;
+            curHp = maxHp;
+
+            curSkill = skills[skillIdx];
+
+            maxSp = curSkill.loadData.cost_e[curSkill.level - 1];
+            curSp = curSkill.loadData.start_e[curSkill.level - 1];
         }
 
         public void 下场()
@@ -163,8 +181,8 @@ namespace Arknights
             state = CharacterState.下场;
             EventManager.ChangeDirection += OnChangeDirection;
             EventManager.LogicUpdate += LogicUpdate;
-            skills[skillIdx].Init();
             Map.Instance.AddUnit(this);
+            Game.Instance.hpSpSliders.ShowHpSp(this);
             if (loadData.部署类型 == 部署类型.Both)
             {
                 var grid_type = Map.Instance.GetGrid(logicPos).type;
@@ -179,6 +197,7 @@ namespace Arknights
             {
                 当前部署类型 = loadData.部署类型;
             }
+
 
             skeletonAnimation.state.SetAnimation(0, "Start", false);
             //播放完毕后切到idle
@@ -198,26 +217,47 @@ namespace Arknights
             EventManager.LogicUpdate -= LogicUpdate;
             EventManager.ChangeDirection -= OnChangeDirection;
             state = CharacterState.手牌;
+            Game.Instance.hpSpSliders.HideHpSp(this);
             transform.position = new Vector3(1000, 0, 0);
             logicPos = new Vector2Int(1000, 0);
         }
 
         private void LogicUpdate()
         {
+            //更新sp数据
+            if (curSp < maxSp)
+            {
+                //每60逻辑帧即1秒钟增加1
+                if (Game.Instance.logicFrame - spTiming >= 60)
+                {
+                    curSp++;
+                    spTiming = Game.Instance.logicFrame;
+                }
+            }
+
+            //刷新血条蓝条
+            if (hpspSlider)
+                hpspSlider.Refresh();
+
+
+            //判断攻击和移动
             if (isSkilling)
             {
-                skillTime += 1f / 60;
-                if (skillTime >= skillDuration)
+                if (Game.Instance.logicFrame - skillTiming >= 60 * skillDuration)
+                {
                     isSkilling = false;
+                }
             }
             else if (isAttacking)
             {
-                attackTime += 1f / 60;
-                if (attackTime >= attackDuration)
+                if (Game.Instance.logicFrame - attackTiming >= 60 * attackDuration)
+                {
                     isAttacking = false;
+                }
             }
+
             if (isSkilling || isAttacking) return;
-            
+
             if (!target)
                 SeekTarget();
             if (target)
@@ -241,7 +281,7 @@ namespace Arknights
         private void Attack()
         {
             skeletonAnimation.state.SetAnimation(0, loadData.attack_anim_name, false);
-            attackTime = 0;
+            attackTiming = Game.Instance.logicFrame;
             isAttacking = true;
             skills[0].Use(target);
         }
@@ -261,7 +301,7 @@ namespace Arknights
         {
             logicPos = new Vector2Int(logicX, logicZ);
             var grid_type = Map.Instance.GetGrid(logicX, logicZ)?.type;
-            transform.position = new Vector3(logicX + 0.5f, grid_type == GridType.站人高台 ? 0.6f : 0, logicZ + 0.2f);
+            transform.position = new Vector3(logicX + 0.5f, grid_type == GridType.站人高台 ? 0.6f : 0, logicZ + 0.3f);
         }
     }
 }

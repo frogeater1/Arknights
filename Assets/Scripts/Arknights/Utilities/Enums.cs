@@ -48,11 +48,6 @@ public enum 职业
     辅助,
 }
 
-public enum PoolType
-{
-    攻击范围,
-}
-
 public enum 方向
 {
     取消,
