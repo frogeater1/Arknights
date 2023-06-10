@@ -100,7 +100,7 @@ namespace Arknights
                 //     //暂时不缓存优化，会让逻辑不清晰
                 //     return;
                 // }
-                var grid_type = Map.Instance.GetGridType(logic_x, logic_z);
+                var grid_type = Map.Instance.GetGrid(logic_x, logic_z)?.type;
                 //修正生成位置为格子正中间
                 if ((setType == 部署类型.地面 && grid_type == GridType.站人地面)
                     || (setType == 部署类型.高台 && grid_type == GridType.站人高台)

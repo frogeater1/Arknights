@@ -7,7 +7,7 @@ namespace Arknights.Skills
     {
         public Data.Skill loadData;
         public string iconURL;
-        public abstract void Use();
+        public abstract void Use(Unit target = null);
 
 #if  UNITY_EDITOR
         

@@ -4,6 +4,14 @@ namespace Arknights
 {
     public static class EventManager
     {
+        
+        public static event Action LogicUpdate;
+        
+        public static void CallLogicUpdate()
+        {
+            LogicUpdate?.Invoke();
+        }
+        
         public static event Action<Character, 方向> ChangeDirection;
 
         public static void CallChangeDirection(Character character, 方向 direction)

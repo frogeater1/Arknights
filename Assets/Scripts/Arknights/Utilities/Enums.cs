@@ -69,8 +69,9 @@ public enum CharacterState
     下场
 }
 
-public enum CharacterType
+public enum Team
 {
-    敌军,
-    友军,
+    Blue,
+    Red,
+    Neutral,
 }

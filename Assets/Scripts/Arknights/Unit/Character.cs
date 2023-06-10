@@ -5,12 +5,13 @@ using Arknights.Skills;
 using Cysharp.Threading.Tasks;
 using FairyGUI;
 using Spine.Unity;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEditor;
 using UnityEngine;
 
 namespace Arknights
 {
-    public class Character : MonoBehaviour
+    public class Character : Unit
     {
         public Data.Character loadData;
 
@@ -26,19 +27,36 @@ namespace Arknights
 
         public SkeletonAnimation skeletonAnimation;
 
+        public float attackDuration; //普攻时间
+        public float skillDuration; //技能时间 //注意这个技能持续时间是放哪个技能时动态设置的
+
         public int skinIdx;
         public int skillIdx;
 
         ///以下是战斗中临时的数据
         public Vector2Int LogicPos;
 
-        //之前是朝左还是朝右,不保存上下,默认朝右
-        private 方向 oldDir = 方向.右;
+        public 部署类型 当前部署类型;
+
+        //之前是朝左还是朝右,不保存上下,默认朝右,用来选择的
+        private 方向 oldSelectDir = 方向.右;
+
+
+        private 方向 attackDir = 方向.右; //这个是角色攻击朝向，用来计算攻击范围的，跟上面那个没关系,高台单位在下场时即固定，地面单位为实际移动的方向，注意跟动画方向无关。
 
         private CharacterState state = CharacterState.手牌;
 
+        //以下两个bool的作用是,移动时，不能正在普攻或放技能时且不能有攻击目标，普攻时，不能正在普攻或放技能，放技能时，不能正在放技能
+        private bool isSkilling = false; //正在放技能中
+        private bool isAttacking = false; //正在普攻中
+        private float skillTime = 0;
+        private float attackTime = 0;
+
+        public Vector2Int logicPos;
+
         private int curE;
-        private Character target;
+        private Unit target;
+
 
 #if UNITY_EDITOR
         public void Load(Data.Character data)
@@ -83,49 +101,47 @@ namespace Arknights
 #endif
 
 
-        private void OnEnable()
-        {
-            EventManager.ChangeDirection += OnChangeDirection;
-        }
-
-        private void OnDisable()
-        {
-            EventManager.ChangeDirection -= OnChangeDirection;
-        }
-
         private void OnChangeDirection(Character character, 方向 dir)
         {
             if (character != this) return;
             switch (dir)
             {
                 case 方向.右:
+                    attackDir = dir;
                     skeletonAnimation.skeleton.ScaleX = 1;
-                    oldDir = dir;
+                    oldSelectDir = dir;
                     break;
                 case 方向.左:
-                    oldDir = dir;
+                    attackDir = dir;
+                    oldSelectDir = dir;
                     skeletonAnimation.skeleton.ScaleX = -1;
                     break;
                 case 方向.上:
+                    attackDir = dir;
                     //切换成背面的spine，暂时只有正面的
-                    skeletonAnimation.skeleton.ScaleX = oldDir == 方向.右 ? 1 : -1;
+                    skeletonAnimation.skeleton.ScaleX = oldSelectDir == 方向.右 ? 1 : -1;
                     break;
                 case 方向.下:
-                    skeletonAnimation.skeleton.ScaleX = oldDir == 方向.右 ? 1 : -1;
+                    attackDir = dir;
+                    skeletonAnimation.skeleton.ScaleX = oldSelectDir == 方向.右 ? 1 : -1;
                     break;
             }
         }
 
         public void Init()
         {
+            //tmp 暂时写死的
             skinIdx = 0;
+
             if (loadData.id == "1")
             {
+                team = Team.Blue;
                 skillIdx = 2;
             }
 
             if (loadData.id == "2")
             {
+                team = Team.Red;
                 skillIdx = 3;
             }
 
@@ -137,24 +153,41 @@ namespace Arknights
                     主动.level = 1;
                 }
             }
+
+            attackDuration = loadData.攻击间隔;
+            skeletonAnimation.skeleton.Data.FindAnimation(loadData.attack_anim_name).Duration = attackDuration;
         }
 
         public void 下场()
         {
             state = CharacterState.下场;
-            skeletonAnimation.AnimationName = "Start";
+            EventManager.ChangeDirection += OnChangeDirection;
+            EventManager.LogicUpdate += LogicUpdate;
+            skills[skillIdx].Init();
+            Map.Instance.AddUnit(this);
+            if (loadData.部署类型 == 部署类型.Both)
+            {
+                var grid_type = Map.Instance.GetGrid(logicPos).type;
+                当前部署类型 = grid_type switch
+                {
+                    GridType.站人地面 => 部署类型.地面,
+                    GridType.站人高台 => 部署类型.高台,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+            }
+            else
+            {
+                当前部署类型 = loadData.部署类型;
+            }
+
             skeletonAnimation.state.SetAnimation(0, "Start", false);
             //播放完毕后切到idle
-            skeletonAnimation.state.Complete += (trackEntry) =>
-            {
-                skeletonAnimation.AnimationName = "Idle";
-                skeletonAnimation.state.SetAnimation(0, "Idle", true);
-            };
-            skills[skillIdx].Init();
+            skeletonAnimation.state.Complete += (trackEntry) => { skeletonAnimation.state.SetAnimation(0, "Idle", true); };
         }
 
         private void OnMouseUpAsButton()
         {
+            //todo: if (team != Game.Instance.team) return;
             //必须先设置当前操作角色，否则directionSelect会找不到该在哪显示
             Game.Instance.CharacterManager.curCharacter = this;
             Game.Instance.ui_directionSelect.ShowCtrl(this);
@@ -162,37 +195,72 @@ namespace Arknights
 
         public void 回收()
         {
+            EventManager.LogicUpdate -= LogicUpdate;
+            EventManager.ChangeDirection -= OnChangeDirection;
             state = CharacterState.手牌;
-            Hide();
-        }
-
-        public void Hide()
-        {
             transform.position = new Vector3(1000, 0, 0);
+            logicPos = new Vector2Int(1000, 0);
         }
 
-        private void Update()
+        private void LogicUpdate()
         {
-            if (state == CharacterState.下场)
+            if (isSkilling)
             {
-                if (!target)
-                    SeekTarget();
+                skillTime += 1f / 60;
+                if (skillTime >= skillDuration)
+                    isSkilling = false;
             }
+            else if (isAttacking)
+            {
+                attackTime += 1f / 60;
+                if (attackTime >= attackDuration)
+                    isAttacking = false;
+            }
+            if (isSkilling || isAttacking) return;
+            
+            if (!target)
+                SeekTarget();
+            if (target)
+            {
+                Attack();
+            }
+            else
+            {
+                if (当前部署类型 == 部署类型.地面)
+                {
+                    Move();
+                }
+            }
+        }
+
+        private void Move()
+        {
+            //todo
+        }
+
+        private void Attack()
+        {
+            skeletonAnimation.state.SetAnimation(0, loadData.attack_anim_name, false);
+            attackTime = 0;
+            isAttacking = true;
+            skills[0].Use(target);
         }
 
         private void SeekTarget()
         {
             foreach (var range in attackRange)
             {
-                var logicGrid = LogicPos + range;
-                // var target = Map.Instance.CheckGrid(logicGrid, CharacterType.敌军);
+                var logicGrid = Map.Instance.CalculPos(logicPos, attackDir, range);
+                target = Map.Instance.CheckGrid(logicGrid, team == Team.Blue ? Team.Red : Team.Blue);
+                if (target)
+                    break;
             }
         }
 
         public void FixedPos(int logicX, int logicZ)
         {
-            LogicPos = new Vector2Int(logicX, logicZ);
-            var grid_type = Map.Instance.GetGridType(logicX, logicZ);
+            logicPos = new Vector2Int(logicX, logicZ);
+            var grid_type = Map.Instance.GetGrid(logicX, logicZ)?.type;
             transform.position = new Vector3(logicX + 0.5f, grid_type == GridType.站人高台 ? 0.6f : 0, logicZ + 0.2f);
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace Arknights
+﻿using UnityEngine;
+
+namespace Arknights
 {
     public partial class UI_Button_escape
     {

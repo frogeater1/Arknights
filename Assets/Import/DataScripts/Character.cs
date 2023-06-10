@@ -22,6 +22,8 @@ namespace Arknights.Data
         
         public string[] spine_path_背面;
         
+        public string attack_anim_name;
+        
         public string[] skills;
         
         public 职业 职业;
@@ -53,6 +55,7 @@ namespace Arknights.Data
             target.tachie_name = tachie_name;
             target.spine_path_正面 = spine_path_正面;
             target.spine_path_背面 = spine_path_背面;
+            target.attack_anim_name = attack_anim_name;
             target.skills = skills;
             target.职业 = 职业;
             target.部署类型 = 部署类型;

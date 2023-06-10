@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using Arknights;
+using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class Decal : MonoBehaviour
@@ -11,7 +13,17 @@ public class Decal : MonoBehaviour
         decalProjector = GetComponent<DecalProjector>();
     }
 
-    private void Update()
+    private void OnEnable()
+    {
+        EventManager.LogicUpdate+=LogicUpdate;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.LogicUpdate-=LogicUpdate;
+    }
+
+    private void LogicUpdate()
     {
         decalProjector.fadeFactor = curve.Evaluate(Time.time % 2);
     }

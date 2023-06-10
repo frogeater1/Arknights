@@ -28,6 +28,5 @@ namespace Arknights
             await UniTask.Delay(500);
             loading.allowSceneActivation = true;
         }
-        
     }
 }

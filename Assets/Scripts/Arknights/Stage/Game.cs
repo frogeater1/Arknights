@@ -13,6 +13,8 @@ namespace Arknights
 
         public UI_Battle ui_battle;
         public UI_DirectionSelect ui_directionSelect;
+
+        // public Team team;
         
         protected override void Awake()
         {
@@ -21,6 +23,13 @@ namespace Arknights
             CameraManager.Init();
             CharacterManager.Init();
             PoolManager.Init();
+        }
+        
+        
+        //tmp 
+        private void Update()
+        {
+            EventManager.CallLogicUpdate();
         }
     }
 }

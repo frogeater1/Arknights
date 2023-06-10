@@ -8,30 +8,40 @@ namespace Arknights.Skills
         public int curE;
         public int level;
 
-        private float time;
-        public override void Use()
+        private float logicFrame;
+
+        public override void Use(Unit target = null)
         {
-            
+        }
+
+        private void OnEnable()
+        {
+            EventManager.LogicUpdate += LogicUpdate;
+        }
+
+        private void OnDisable()
+        {
+            EventManager.LogicUpdate -= LogicUpdate;
         }
 
         public override void Init()
         {
             curE = loadData.start_e[level - 1];
-            time = 0;
+            logicFrame = 0;
         }
 
-        private void Update()
+        private void LogicUpdate()
         {
             var cost_E = loadData.cost_e[level - 1];
             if (curE < cost_E)
             {
-               //每秒增加1
-               time += Time.deltaTime;
-               if (time >= 1f)
-               {
-                   curE++;
-                   time = 0;
-               }
+                //每60逻辑帧增加1
+                logicFrame ++ ;
+                if (logicFrame >= 60)
+                {
+                    curE++;
+                    logicFrame = 0;
+                }
             }
         }
     }
