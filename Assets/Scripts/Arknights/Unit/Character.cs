@@ -36,9 +36,7 @@ namespace Arknights
 
         ///以下是战斗中临时的数据
         public int cardListIdx; //在卡盒中的索引
-
-        public Vector2Int LogicPos;
-
+        
         public 部署类型 当前部署类型;
 
         //之前是朝左还是朝右,不保存上下,默认朝右,用来选择的

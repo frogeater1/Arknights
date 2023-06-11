@@ -30,16 +30,10 @@ namespace Arknights
                     Hide();
                     break;
                 case 方向.右:
-                    Show(character, 0);
-                    break;
                 case 方向.下:
-                    Show(character, 90);
-                    break;
                 case 方向.左:
-                    Show(character, 180);
-                    break;
                 case 方向.上:
-                    Show(character, 270);
+                    Show(character, direction);
                     break;
             }
         }
@@ -56,10 +50,10 @@ namespace Arknights
             // Game.Instance.PoolManager.pools.Add(this);
         }
 
-        public void Show(Character character, int rotation = 0)
+        public void Show(Character character, 方向 dir = 方向.右)
         {
-            transform.localRotation = Quaternion.Euler(0, rotation, 0);
-            transform.localPosition = new Vector3(character.transform.localPosition.x, 0.03f, Mathf.Floor(character.transform.localPosition.z) + 0.5f);
+            // transform.localRotation = Quaternion.Euler(0, rotation, 0);
+            transform.localPosition = new Vector3(character.logicPos.x + 0.5f, 0.03f, character.logicPos.y + 0.5f);
 
             if (attackGrids != null)
             {
@@ -74,7 +68,8 @@ namespace Arknights
             {
                 var attack_grid = pool.Get();
 
-                attack_grid.transform.localPosition = new Vector3(range.x, 0, range.y);
+                var localPos = Map.Instance.CalculPos(Vector2Int.zero, dir, range);
+                attack_grid.transform.localPosition = new Vector3(localPos.x, 0, localPos.y);
                 var position = attack_grid.transform.position;
                 var grid_type = Map.Instance.GetGrid(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.z))?.type;
                 if (grid_type == GridType.不站人高台 || grid_type == GridType.站人高台)

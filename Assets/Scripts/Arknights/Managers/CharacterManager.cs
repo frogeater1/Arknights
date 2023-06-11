@@ -14,7 +14,25 @@ namespace Arknights
         public Character[] characters;
 
         //设置为属性可以展示usages
-        public Character curCharacter { get; set; }
+        private Character _curCharacter;
+        public Character curCharacter
+        {
+            get => _curCharacter;
+            set
+            {
+                _curCharacter = value;
+                if (value)
+                {
+                    Game.Instance.ui_battle.ShowStats(true, value);
+                    Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, -3));
+                }
+                else
+                {
+                    Game.Instance.ui_battle.ShowStats(false);
+                    Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, 0));
+                }
+            }
+        }
 
         public void Init()
         {

@@ -841,6 +841,7 @@ MonoBehaviour:
   PoolManager: {fileID: 602240191}
   attackRange: {fileID: 1701363045}
   hpSpSliders: {fileID: 821424979}
+  logicFrame: 0
 --- !u!114 &602240191
 MonoBehaviour:
   m_ObjectHideFlags: 0
