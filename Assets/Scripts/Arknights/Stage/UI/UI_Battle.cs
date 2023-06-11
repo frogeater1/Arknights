@@ -24,7 +24,7 @@ namespace Arknights
         public void 下场()
         {
             UI_Button_角色卡 button = (UI_Button_角色卡)m_card_list.GetChildAt(m_card_list.selectedIndex);
-            button.width = 0;//将width设置为0，使其不可见
+            button.visible = false;
             m_card_list.selectedIndex = -1;
         }
 
@@ -32,7 +32,7 @@ namespace Arknights
         {
             var character = Game.Instance.CharacterManager.curCharacter;
             UI_Button_角色卡 button = (UI_Button_角色卡)m_card_list.GetChildAt(character.cardListIdx);
-            button.width = 192;
+            button.visible = true;
         }
 
         private void RenderCard(int index, GObject obj)
