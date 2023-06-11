@@ -12,11 +12,11 @@ namespace Arknights
         }
         
         //注意静态事件仅用于处理View层面，不要用于处理Model层面，Model层面的事件应该直接从Game的索引中调用
-        public static event Action<Character, 方向> ChangeDirection;
+        public static event Action<方向> ChangeDirection;
 
-        public static void CallChangeDirection(Character character, 方向 direction)
+        public static void CallChangeDirection(方向 direction)
         {
-            ChangeDirection?.Invoke(character, direction);
+            ChangeDirection?.Invoke(direction);
         }
         
         public static event Action CancelSelect;

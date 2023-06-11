@@ -109,9 +109,9 @@ namespace Arknights
 #endif
 
 
-        private void OnChangeDirection(Character character, 方向 dir)
+        //这里不接收事件而是手动调用，因为方向会影响攻击范围，改变了实际逻辑。
+        public void ChangeDirection(方向 dir)
         {
-            if (character != this) return;
             switch (dir)
             {
                 case 方向.右:
@@ -178,7 +178,6 @@ namespace Arknights
         public void 下场()
         {
             state = CharacterState.下场;
-            EventManager.ChangeDirection += OnChangeDirection;
             EventManager.LogicUpdate += LogicUpdate;
             Map.Instance.AddUnit(this);
             Game.Instance.hpSpSliders.ShowHpSp(this);
@@ -215,7 +214,6 @@ namespace Arknights
         public void 回收()
         {
             EventManager.LogicUpdate -= LogicUpdate;
-            EventManager.ChangeDirection -= OnChangeDirection;
             state = CharacterState.手牌;
             Game.Instance.hpSpSliders.HideHpSp(this);
             transform.position = new Vector3(1000, 0, 0);
@@ -257,7 +255,7 @@ namespace Arknights
             }
 
             if (isSkilling || isAttacking) return;
-
+      
             if (!target)
                 SeekTarget();
             if (target)

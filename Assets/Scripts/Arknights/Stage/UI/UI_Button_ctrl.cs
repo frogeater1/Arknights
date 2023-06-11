@@ -12,7 +12,7 @@ namespace Arknights
 
         private bool moving;
 
-        public 方向? oldDir;
+        public 方向 oldDir;
 
         partial void Init()
         {
@@ -28,7 +28,7 @@ namespace Arknights
             startPos = evt.position;
             draggingObject = this;
             // context.CaptureTouch();
-            oldDir = null;
+            oldDir = 方向.取消;
             moving = false;
         }
 
@@ -67,8 +67,8 @@ namespace Arknights
 
             if (dir != oldDir)
             {
-                var character = Game.Instance.CharacterManager.curCharacter;
-                EventManager.CallChangeDirection(character, dir);
+                oldDir = dir;
+                EventManager.CallChangeDirection(dir);
             }
         }
 
@@ -85,6 +85,7 @@ namespace Arknights
             if (Game.Instance.ui_directionSelect.m_option.selectedPage != "取消")
             {
                 EventManager.CallCancelSelect();
+                Game.Instance.CharacterManager.curCharacter.ChangeDirection(oldDir);
                 Game.Instance.CharacterManager.curCharacter.下场();
                 Game.Instance.ui_battle.下场();
                 Game.Instance.CharacterManager.curCharacter = null;

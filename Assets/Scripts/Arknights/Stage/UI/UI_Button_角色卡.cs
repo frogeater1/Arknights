@@ -100,7 +100,7 @@ namespace Arknights
                     m_drager.visible = false;
                     character.FixedPos(logic_x, logic_z);
                     canSet = true;
-                    Game.Instance.attackRange.Show(character);
+                    Game.Instance.attackRange.Show();
                 }
             }
 

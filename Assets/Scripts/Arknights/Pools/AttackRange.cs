@@ -22,7 +22,7 @@ namespace Arknights
             EventManager.CancelSelect -= Hide;
         }
 
-        private void OnChangeDirection(Character character, 方向 direction)
+        private void OnChangeDirection(方向 direction)
         {
             switch (direction)
             {
@@ -33,7 +33,7 @@ namespace Arknights
                 case 方向.下:
                 case 方向.左:
                 case 方向.上:
-                    Show(character, direction);
+                    Show(direction);
                     break;
             }
         }
@@ -50,9 +50,10 @@ namespace Arknights
             // Game.Instance.PoolManager.pools.Add(this);
         }
 
-        public void Show(Character character, 方向 dir = 方向.右)
+        public void Show(方向 dir = 方向.右)
         {
-            // transform.localRotation = Quaternion.Euler(0, rotation, 0);
+
+            Character character = Game.Instance.CharacterManager.curCharacter;
             transform.localPosition = new Vector3(character.logicPos.x + 0.5f, 0.03f, character.logicPos.y + 0.5f);
 
             if (attackGrids != null)

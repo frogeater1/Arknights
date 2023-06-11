@@ -30,7 +30,7 @@ namespace Arknights
             }
         }
 
-        private void OnChangeDirection(Character character, 方向 direction)
+        private void OnChangeDirection(方向 direction)
         {
             m_option.selectedPage = direction.ToString();
         }
