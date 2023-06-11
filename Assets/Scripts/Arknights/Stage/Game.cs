@@ -25,7 +25,7 @@ namespace Arknights
         protected override void Awake()
         {
             base.Awake();
-            ArknightsBinder.BindAll();
+            // ArknightsBinder.BindAll();
             CameraManager.Init();
             CharacterManager.Init();
             PoolManager.Init();

@@ -8,6 +8,11 @@ namespace Arknights
     {
         public static void BindAll()
         {
+            UIObjectFactory.SetPackageItemExtension(UI_Server.URL, typeof(UI_Server));
+            UIObjectFactory.SetPackageItemExtension(UI_Button_创建房间.URL, typeof(UI_Button_创建房间));
+            UIObjectFactory.SetPackageItemExtension(UI_Button_加入房间.URL, typeof(UI_Button_加入房间));
+            UIObjectFactory.SetPackageItemExtension(UI_Button_取消等待.URL, typeof(UI_Button_取消等待));
+            UIObjectFactory.SetPackageItemExtension(UI_Button_close.URL, typeof(UI_Button_close));
             UIObjectFactory.SetPackageItemExtension(UI_Home.URL, typeof(UI_Home));
             UIObjectFactory.SetPackageItemExtension(UI_Button_add.URL, typeof(UI_Button_add));
             UIObjectFactory.SetPackageItemExtension(UI_Button_空白.URL, typeof(UI_Button_空白));
