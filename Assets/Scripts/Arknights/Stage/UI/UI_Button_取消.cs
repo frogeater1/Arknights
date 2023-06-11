@@ -12,6 +12,7 @@ namespace Arknights
         private void Click()
         {
             EventManager.CallCancelSelect();
+            Game.Instance.CharacterManager.curCharacter.Hide();
             Game.Instance.ui_battle.CancelSelect();
             Game.Instance.CharacterManager.curCharacter = null;
         }

@@ -90,7 +90,7 @@ public class Map : Singleton<Map>, ILoadable
             grid.units.Add(character);
         }
     }
-    public void RemoveUnit( Character character)
+    public void RemoveUnit(Character character)
     {
         if (grids.TryGetValue(character.logicPos, out var grid))
         {

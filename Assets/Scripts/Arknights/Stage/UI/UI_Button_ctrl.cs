@@ -68,6 +68,7 @@ namespace Arknights
             if (dir != oldDir)
             {
                 oldDir = dir;
+                Game.Instance.CharacterManager.curCharacter.ChangeDirection(dir);
                 EventManager.CallChangeDirection(dir);
             }
         }
@@ -81,11 +82,10 @@ namespace Arknights
                 this.SetXY(center.x, center.y);
                 draggingObject = null;
             }
-
-            if (Game.Instance.ui_directionSelect.m_option.selectedPage != "取消")
+            
+            if (oldDir != 方向.取消)
             {
                 EventManager.CallCancelSelect();
-                Game.Instance.CharacterManager.curCharacter.ChangeDirection(oldDir);
                 Game.Instance.CharacterManager.curCharacter.下场();
                 Game.Instance.ui_battle.下场();
                 Game.Instance.CharacterManager.curCharacter = null;

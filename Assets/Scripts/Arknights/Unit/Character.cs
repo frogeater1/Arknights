@@ -204,7 +204,8 @@ namespace Arknights
 
         private void OnMouseUpAsButton()
         {
-            //todo: if (team != Game.Instance.team) return;
+            if (state != CharacterState.下场) return;
+                //todo: if (team != Game.Instance.team) return;
             //必须先设置当前操作角色，否则directionSelect会找不到该在哪显示
             Game.Instance.CharacterManager.curCharacter = this;
             Game.Instance.ui_battle.CancelSelect();
@@ -214,8 +215,14 @@ namespace Arknights
         public void 回收()
         {
             EventManager.LogicUpdate -= LogicUpdate;
-            state = CharacterState.手牌;
+            Map.Instance.RemoveUnit(this);
+            Hide();
             Game.Instance.hpSpSliders.HideHpSp(this);
+            state = CharacterState.手牌;
+        }
+
+        public void Hide()
+        {
             transform.position = new Vector3(1000, 0, 0);
             logicPos = new Vector2Int(1000, 0);
         }
