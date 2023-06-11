@@ -8,8 +8,6 @@ namespace Arknights
 {
     public class CharacterManager : MonoBehaviour
     {
-        //tmp
-        public Character[] c;
 
         public Character[] characters;
 
@@ -36,8 +34,6 @@ namespace Arknights
 
         public void Init()
         {
-            //tmp
-            Parking.characterPrefabs = c;
 
             characters = new Character[Parking.characterPrefabs.Length];
 
