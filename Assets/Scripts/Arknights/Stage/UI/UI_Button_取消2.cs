@@ -10,6 +10,8 @@
         private void Click()
         {
             EventManager.CallCancelSelect();
+            Game.Instance.ui_battle.CancelSelect();
+            Game.Instance.CharacterManager.curCharacter = null;
         }
     }
 }

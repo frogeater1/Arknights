@@ -1,4 +1,5 @@
 ﻿using FairyGUI;
+using UnityEngine;
 using UnityEngine.TextCore.Text;
 
 namespace Arknights
@@ -8,18 +9,30 @@ namespace Arknights
         partial void Init()
         {
             Game.Instance.ui_battle = this;
-            EventManager.CancelSelect += OnCancelSelect;
-            
+
             m_stats.visible = false;
             m_card_list.itemRenderer = RenderCard;
             m_card_list.numItems = 2;
             m_card_list.ResizeToFit();
         }
 
-        private void OnCancelSelect()
+        public void CancelSelect()
         {
             m_card_list.selectedIndex = -1;
-            Game.Instance.CharacterManager.curCharacter = null;
+        }
+
+        public void 下场()
+        {
+            UI_Button_角色卡 button = (UI_Button_角色卡)m_card_list.GetChildAt(m_card_list.selectedIndex);
+            button.width = 0;//将width设置为0，使其不可见
+            m_card_list.selectedIndex = -1;
+        }
+
+        public void 回收()
+        {
+            var character = Game.Instance.CharacterManager.curCharacter;
+            UI_Button_角色卡 button = (UI_Button_角色卡)m_card_list.GetChildAt(character.cardListIdx);
+            button.width = 192;
         }
 
         private void RenderCard(int index, GObject obj)
@@ -27,7 +40,7 @@ namespace Arknights
             UI_Button_角色卡 button = (UI_Button_角色卡)obj;
             button.Render(index);
         }
-        
+
         public void ShowStats(bool show, Character character = null)
         {
             m_stats.visible = show;

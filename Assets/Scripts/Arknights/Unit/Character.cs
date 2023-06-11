@@ -35,6 +35,8 @@ namespace Arknights
         public int skillIdx;
 
         ///以下是战斗中临时的数据
+        public int cardListIdx; //在卡盒中的索引
+
         public Vector2Int LogicPos;
 
         public 部署类型 当前部署类型;
@@ -65,7 +67,6 @@ namespace Arknights
         public float spTiming = 0;
         public float attackTiming = 0;
         public float skillTiming = 0;
-
 
 #if UNITY_EDITOR
         public void Load(Data.Character data)
@@ -209,6 +210,7 @@ namespace Arknights
             //todo: if (team != Game.Instance.team) return;
             //必须先设置当前操作角色，否则directionSelect会找不到该在哪显示
             Game.Instance.CharacterManager.curCharacter = this;
+            Game.Instance.ui_battle.CancelSelect();
             Game.Instance.ui_directionSelect.ShowCtrl(this);
         }
 

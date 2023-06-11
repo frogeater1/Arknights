@@ -53,6 +53,7 @@ namespace Arknights
         {
             idx = index;
             character = Game.Instance.CharacterManager.characters[index];
+            character.cardListIdx = idx;
             icon = character.avatarURLs[character.skinIdx];
             m_职业icon.SetSelectedPage(character.loadData.职业.ToString());
             // m_elite_lv.icon = character.eliteURLs;

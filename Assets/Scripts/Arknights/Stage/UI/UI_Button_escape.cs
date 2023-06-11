@@ -8,8 +8,10 @@ namespace Arknights
         {
             onClick.Add(() =>
             {
-                Game.Instance.CharacterManager.curCharacter.回收();
                 EventManager.CallCancelSelect();
+                Game.Instance.CharacterManager.curCharacter.回收();
+                Game.Instance.ui_battle.回收();
+                Game.Instance.CharacterManager.curCharacter = null;
             });
         }
     }

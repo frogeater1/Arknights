@@ -84,9 +84,10 @@ namespace Arknights
 
             if (Game.Instance.ui_directionSelect.m_option.selectedPage != "取消")
             {
-                Game.Instance.CharacterManager.curCharacter.下场();
-                //要先下场,否则选中卡片会被清除后找不到当前角色
                 EventManager.CallCancelSelect();
+                Game.Instance.CharacterManager.curCharacter.下场();
+                Game.Instance.ui_battle.下场();
+                Game.Instance.CharacterManager.curCharacter = null;
             }
         }
     }

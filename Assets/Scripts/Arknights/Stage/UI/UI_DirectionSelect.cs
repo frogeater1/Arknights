@@ -20,12 +20,12 @@ namespace Arknights
                     ScenenUI.position = new Vector3(character.transform.localPosition.x, 1f,
                         Mathf.Floor(character.transform.localPosition.z) + 0.5f);
                     EventManager.ChangeDirection += OnChangeDirection;
-                    EventManager.CancelSelect += OnCancelSelect;
+                    EventManager.CancelSelect += Hide;
                 }
                 else
                 {
                     EventManager.ChangeDirection -= OnChangeDirection;
-                    EventManager.CancelSelect -= OnCancelSelect;
+                    EventManager.CancelSelect -= Hide;
                 }
             }
         }
@@ -35,7 +35,7 @@ namespace Arknights
             m_option.selectedPage = direction.ToString();
         }
 
-        private void OnCancelSelect()
+        private void Hide()
         {
             visible = false;
         }
