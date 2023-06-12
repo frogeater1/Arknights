@@ -1,12 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Arknights;
+using FairyGUI;
 using UnityEngine;
 
 public class test : MonoBehaviour
 {
-    // Start is called before the first frame update
-    private void OnMouseUpAsButton()
+    protected void Awake()
     {
-        Debug.Log("click");
+        ArknightsBinder.BindAll();
+        
     }
+    
 }

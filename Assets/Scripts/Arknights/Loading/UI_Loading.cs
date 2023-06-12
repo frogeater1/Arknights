@@ -3,31 +3,23 @@ using Cysharp.Threading.Tasks;
 using FairyGUI;
 using UnityEngine;
 
-namespace Arknights.Loading
+namespace Arknights
 {
-    public class UILoading : MonoBehaviour
+    public partial class UI_Loading
     {
-        private GComponent ui;
-        [NonSerialized]
-        public GGroup stage;
-        private GGraph curtain;
-        
-        private void Start()
+        partial void Init()
         {
-            ui = GetComponent<UIPanel>().ui;
-            curtain = ui.GetChild("curtain").asGraph;
-            stage = ui.GetChild("stage").asGroup;
-            stage.visible = false;
+            Main.Instance.ui_loading = this;
+            m_stage.visible = false;
         }
 
-        public void  Fade()
+        public void Fade()
         {
-            curtain.TweenFade(1, 0.5f).OnComplete(() =>
+            m_curtain.TweenFade(1, 0.5f).OnComplete(() =>
             {
-                stage.visible = true;
-                curtain.TweenFade(0, 0.2f);
+                m_stage.visible = true;
+                m_curtain.TweenFade(0, 0.2f);
             });
         }
-    
     }
 }

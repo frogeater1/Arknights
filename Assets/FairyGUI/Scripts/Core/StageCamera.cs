@@ -88,38 +88,38 @@ namespace FairyGUI
 
         void OnScreenSizeChanged(int newWidth, int newHeight)
         {
-            // if (newWidth == 0 || newHeight == 0)
-            //     return;
-            //
-            // screenWidth = newWidth;
-            // screenHeight = newHeight;
-            //
-            // if (constantSize)
-            // {
-            //     cachedCamera.orthographicSize = DefaultCameraSize;
-            //     unitsPerPixel = cachedCamera.orthographicSize * 2 / screenHeight;
-            // }
-            // else
-            // {
-            //     unitsPerPixel = DefaultUnitsPerPixel;
-            //     cachedCamera.orthographicSize = screenHeight / 2 * unitsPerPixel;
-            // }
-            // cachedTransform.localPosition = new Vector3(cachedCamera.orthographicSize * screenWidth / screenHeight, -cachedCamera.orthographicSize);
-            //
-            // if (isMain)
-            // {
-            //     screenSizeVer++;
-            //     if (Application.isPlaying)
-            //         Stage.inst.HandleScreenSizeChanged(screenWidth, screenHeight, unitsPerPixel);
-            //     else
-            //     {
-            //         UIContentScaler scaler = GameObject.FindObjectOfType<UIContentScaler>();
-            //         if (scaler != null)
-            //             scaler.ApplyChange();
-            //         else
-            //             UIContentScaler.scaleFactor = 1;
-            //     }
-            // }
+            if (newWidth == 0 || newHeight == 0)
+                return;
+            
+            screenWidth = newWidth;
+            screenHeight = newHeight;
+            
+            if (constantSize)
+            {
+                cachedCamera.orthographicSize = DefaultCameraSize;
+                unitsPerPixel = cachedCamera.orthographicSize * 2 / screenHeight;
+            }
+            else
+            {
+                unitsPerPixel = DefaultUnitsPerPixel;
+                cachedCamera.orthographicSize = screenHeight / 2 * unitsPerPixel;
+            }
+            cachedTransform.localPosition = new Vector3(cachedCamera.orthographicSize * screenWidth / screenHeight, -cachedCamera.orthographicSize);
+            
+            if (isMain)
+            {
+                screenSizeVer++;
+                if (Application.isPlaying)
+                    Stage.inst.HandleScreenSizeChanged(screenWidth, screenHeight, unitsPerPixel);
+                else
+                {
+                    UIContentScaler scaler = GameObject.FindObjectOfType<UIContentScaler>();
+                    if (scaler != null)
+                        scaler.ApplyChange();
+                    else
+                        UIContentScaler.scaleFactor = 1;
+                }
+            }
         }
 
         void OnRenderObject()
@@ -147,7 +147,7 @@ namespace FairyGUI
                 CreateCamera(Name, 1 << layer);
             }
 
-            HitTestContext.cachedMainCamera = main;
+            HitTestContext.cachedMainCamera = Camera.main;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using FairyGUI;
 using UnityEngine;
 
 namespace Arknights
@@ -20,8 +21,6 @@ namespace Arknights
         
         //tmp
         public int logicFrame = 0;
-        
-        
         protected override void Awake()
         {
             base.Awake();
