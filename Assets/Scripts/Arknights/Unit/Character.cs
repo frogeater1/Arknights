@@ -151,7 +151,7 @@ namespace Arknights
             {
                 skillIdx = 3;
             }
-
+            
             foreach (var s in skills)
             {
                 if (s is 主动)
@@ -160,6 +160,7 @@ namespace Arknights
                     主动.level = 1;
                 }
             }
+            //tmp end
 
             attackDuration = loadData.攻击间隔;
 
@@ -242,12 +243,7 @@ namespace Arknights
                     spTiming = Game.Instance.logicFrame;
                 }
             }
-
-            //刷新血条蓝条
-            if (hpspSlider)
-                hpspSlider.Refresh();
-
-
+            
             //判断攻击和移动
             if (isSkilling)
             {

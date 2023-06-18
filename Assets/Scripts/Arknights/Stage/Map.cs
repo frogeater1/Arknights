@@ -17,7 +17,7 @@ public class Map : Singleton<Map>, ILoadable
 
     [SerializeField]
     public int width;
-    
+
     public Dictionary<Vector2Int, Grid> grids = new();
 
 #if UNITY_EDITOR
@@ -43,19 +43,14 @@ public class Map : Singleton<Map>, ILoadable
 
     public Grid GetGrid(int x, int z)
     {
-        return grids.TryGetValue(new Vector2Int(x, z), out var grid) ? grid : null;
-        // if (x < 0 || x >= width || z < 0 || z >= height)
-        // {
-        //     return null;
-        // }
-        //
-        // //example: (1,6)=> (height - z - 1,x)=>(2,1) => 2*w+1 = 29;
-        // return gridData[(height - z - 1) * width + x];
+        grids.TryGetValue(new Vector2Int(x, z), out var grid);
+        return grid;
     }
-    
+
     public Grid GetGrid(Vector2Int logicPos)
     {
-        return grids.TryGetValue(logicPos, out var grid) ? grid : null;
+        grids.TryGetValue(logicPos, out var grid);
+        return grid;
     }
 
     //检查这个格子上有没有指定角色
@@ -90,6 +85,7 @@ public class Map : Singleton<Map>, ILoadable
             grid.units.Add(character);
         }
     }
+
     public void RemoveUnit(Character character)
     {
         if (grids.TryGetValue(character.logicPos, out var grid))
@@ -103,7 +99,6 @@ public class Map : Singleton<Map>, ILoadable
 
     public Vector2Int CalculPos(Vector2Int logicPos, 方向 attackDir, Vector2Int range)
     {
-
         return attackDir switch
         {
             方向.右 => logicPos + range,
