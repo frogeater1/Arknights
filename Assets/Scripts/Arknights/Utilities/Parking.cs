@@ -13,15 +13,15 @@ namespace Arknights
 
         public static void StartBattle(Character[] prefabs)
         {
-            LoadScene("Stage").Forget();
             characterPrefabs = prefabs;
+            LoadScene("Stage").Forget();
         }
         
         public static async UniTaskVoid LoadScene(string scene)
         {
             var loading = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Single);
             loading.allowSceneActivation = false;
-            Main.Instance.ui_loading.Fade();
+            Main.Instance.ui_loading.FadeOut();
             await UniTask.WaitUntil(()=>Main.Instance.ui_loading.m_stage.visible);
             await UniTask.Delay(500);
             loading.allowSceneActivation = true;

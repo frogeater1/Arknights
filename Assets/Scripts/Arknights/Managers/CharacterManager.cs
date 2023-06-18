@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Arknights.Data;
 using FairyGUI;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 namespace Arknights
 {
@@ -34,7 +35,6 @@ namespace Arknights
 
         public void Init()
         {
-
             characters = new Character[Parking.characterPrefabs.Length];
 
             for (int i = 0; i < Parking.characterPrefabs.Length; i++)

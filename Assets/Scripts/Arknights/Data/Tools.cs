@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using FairyGUI;
 using Newtonsoft.Json;
@@ -46,12 +47,12 @@ namespace Arknights.Data
             try
             {
                 AssetDatabase.StartAssetEditing();
-            
+
                 //json转成c#数组
                 LoadAll();
-            
+
                 MakeCharacter();
-            
+
                 MakeMap();
             }
             catch (Exception e)
@@ -63,6 +64,23 @@ namespace Arknights.Data
                 AssetDatabase.StopAssetEditing();
             }
         }
+
+        [MenuItem("Tools/Proto2cs")]
+        public static void Proto2cs()
+        {
+
+            var process = Process.Start(new ProcessStartInfo()
+            {
+                UseShellExecute = true,
+                WorkingDirectory = "..",
+                FileName = "build.bat",
+            })!;
+            process.WaitForExit();
+            process.Close();
+
+            Debug.Log("proto2cs success!");
+        }
+
 
         public static T Load<T>(string name)
         {
@@ -99,17 +117,17 @@ namespace Arknights.Data
         private static void MakeMap()
         {
             //todo:多关卡读取，这里先只读第0关
-            
+
             int width = Grid[0].gridline.Length;
             int height = Grid.Length;
-            
+
             var texture_地面 = new Texture2D(width, height);
             var texture_高台 = new Texture2D(width, height);
-            
+
             var map_data_list = new List<GridType>();
-            
+
             //example: (3,8)=>(8,5)=>(j,height-i-1)
-            
+
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)
@@ -132,18 +150,20 @@ namespace Arknights.Data
                     }
                 }
             }
-            
+
             //必须在换场景之前保存否则会丢失，报错：Passed in texture is invalid.
-            System.IO.File.WriteAllBytes(Application.dataPath + "/Resources/Textures/texture_地面.png", texture_地面.EncodeToPNG());
-            System.IO.File.WriteAllBytes(Application.dataPath + "/Resources/Textures/texture_高台.png", texture_高台.EncodeToPNG());
-            
+            System.IO.File.WriteAllBytes(Application.dataPath + "/Resources/Textures/texture_地面.png",
+                texture_地面.EncodeToPNG());
+            System.IO.File.WriteAllBytes(Application.dataPath + "/Resources/Textures/texture_高台.png",
+                texture_高台.EncodeToPNG());
+
             // var cur_scene_path = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().path;
             var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Stage.unity");
             foreach (var obj in Object.FindObjectsOfType<MonoBehaviour>().OfType<ILoadable>())
             {
                 obj.Load(map_data_list, width, height);
             }
-            
+
             //保存并打开之前的场景
             UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);
             UnityEditor.SceneManagement.EditorSceneManager.SaveOpenScenes();

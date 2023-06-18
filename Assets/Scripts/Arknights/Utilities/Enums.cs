@@ -70,3 +70,19 @@ public enum Team
     Red,
     Neutral,
 }
+
+public enum ResCode
+{
+    Success = 1,
+    DuplicateName = 2,
+    CantFindRoom = 3,
+    RoomIsFull = 4,
+}
+
+public enum RoomState
+{
+    start,
+    create_waiting,
+    host_waiting,
+    guest_waiting,
+}

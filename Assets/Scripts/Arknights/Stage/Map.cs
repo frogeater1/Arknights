@@ -67,7 +67,7 @@ public class Map : Singleton<Map>, ILoadable
             {
                 foreach (var u in grid.units)
                 {
-                    if (u.team == team)
+                    if (u.player.team == team)
                     {
                         return u;
                     }

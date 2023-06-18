@@ -14,6 +14,7 @@ namespace Arknights
 {
     public class Character : Unit
     {
+
         public Data.Character loadData;
 
         public string[] avatarURLs;
@@ -36,7 +37,7 @@ namespace Arknights
 
         ///以下是战斗中临时的数据
         public int cardListIdx; //在卡盒中的索引
-        
+
         public 部署类型 当前部署类型;
 
         //之前是朝左还是朝右,不保存上下,默认朝右,用来选择的
@@ -143,13 +144,11 @@ namespace Arknights
 
             if (loadData.id == "1")
             {
-                team = Team.Blue;
                 skillIdx = 2;
             }
 
             if (loadData.id == "2")
             {
-                team = Team.Red;
                 skillIdx = 3;
             }
 
@@ -177,6 +176,7 @@ namespace Arknights
 
         public void 下场()
         {
+            player = Game.Instance.me;
             state = CharacterState.下场;
             EventManager.LogicUpdate += LogicUpdate;
             Map.Instance.AddUnit(this);
@@ -199,13 +199,16 @@ namespace Arknights
 
             skeletonAnimation.state.SetAnimation(0, "Start", false);
             //播放完毕后切到idle
-            skeletonAnimation.state.Complete += (trackEntry) => { skeletonAnimation.state.SetAnimation(0, "Idle", true); };
+            skeletonAnimation.state.Complete += (trackEntry) =>
+            {
+                skeletonAnimation.state.SetAnimation(0, "Idle", true);
+            };
         }
 
         private void OnMouseUpAsButton()
         {
             if (state != CharacterState.下场) return;
-                //todo: if (team != Game.Instance.team) return;
+            if (player.team != Game.Instance.me.team) return;
             //必须先设置当前操作角色，否则directionSelect会找不到该在哪显示
             Game.Instance.CharacterManager.curCharacter = this;
             Game.Instance.ui_battle.CancelSelect();
@@ -262,7 +265,7 @@ namespace Arknights
             }
 
             if (isSkilling || isAttacking) return;
-      
+
             if (!target)
                 SeekTarget();
             if (target)
@@ -296,7 +299,7 @@ namespace Arknights
             foreach (var range in attackRange)
             {
                 var logicGrid = Map.Instance.CalculPos(logicPos, attackDir, range);
-                target = Map.Instance.CheckGrid(logicGrid, team == Team.Blue ? Team.Red : Team.Blue);
+                target = Map.Instance.CheckGrid(logicGrid, player.team == Team.Blue ? Team.Red : Team.Blue);
                 if (target)
                     break;
             }

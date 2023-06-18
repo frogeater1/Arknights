@@ -32,6 +32,13 @@
       },
       "hash": "bee4d4060caf704ab68f79006d96829542741d8a"
     },
+    "com.gameworkstore.googleprotobufunity": {
+      "version": "https://github.com/GameWorkstore/google-protobuf-unity.git#3.15.2012",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "655ece78bda22e0aa28593d8dddccbca6de719bb"
+    },
     "com.unity.burst": {
       "version": "1.8.4",
       "depth": 1,
@@ -165,6 +172,13 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
+    },
+    "com.veriorpies.parrelsync": {
+      "version": "https://github.com/VeriorPies/ParrelSync.git?path=/ParrelSync",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "141b4e1e31966242a6fb7c495b52ac3d1221bc75"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

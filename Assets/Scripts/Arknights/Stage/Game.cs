@@ -6,6 +6,7 @@ namespace Arknights
 {
     public class Game : Singleton<Game>
     {
+        
         public CameraManager CameraManager;
 
         public CharacterManager CharacterManager;
@@ -18,15 +19,17 @@ namespace Arknights
 
         public UI_Battle ui_battle;
         public UI_DirectionSelect ui_directionSelect;
+        public OnlineWindow ui_online_window;
         
-        //tmp
+        
+        public Player me;
+            
         public int logicFrame = 0;
         protected override void Awake()
         {
             base.Awake();
-            // ArknightsBinder.BindAll();
             CameraManager.Init();
-            CharacterManager.Init();
+            CharacterManager.Init(); //延迟到点击创建或加入时再Init
             PoolManager.Init();
             EventManager.LogicUpdate+= OnLogicUpdate;
         }
@@ -37,10 +40,9 @@ namespace Arknights
         }
 
 
-        //tmp 
         private void Update()
         {
-            EventManager.CallLogicUpdate();
+            Dispacher.Distribute();
         }
     }
 }

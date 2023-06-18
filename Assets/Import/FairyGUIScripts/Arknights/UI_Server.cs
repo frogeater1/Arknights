@@ -18,6 +18,7 @@ namespace Arknights
         public UI_Button_取消等待 m_cancel;
         public GTextField m_n10;
         public GTextField m_n13;
+        public GTextField m_tip;
         public const string URL = "ui://wnbsox0h9stu4o";
 
         public static UI_Server CreateInstance()
@@ -40,6 +41,7 @@ namespace Arknights
             m_cancel = (UI_Button_取消等待)GetChildAt(7);
             m_n10 = (GTextField)GetChildAt(8);
             m_n13 = (GTextField)GetChildAt(9);
+            m_tip = (GTextField)GetChildAt(10);
             Init();
         }
         partial void Init();

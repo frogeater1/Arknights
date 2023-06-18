@@ -507,7 +507,6 @@ MonoBehaviour:
     cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
     durantion: []
   iconURL: ui://wnbsox0hnnfh4i
-  curE: 0
   level: 0
 --- !u!114 &8743790001106319012
 MonoBehaviour:
@@ -538,6 +537,7 @@ MonoBehaviour:
     cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
     durantion: []
   iconURL: ui://wnbsox0hnnfh4i
+  level: 0
 --- !u!114 &6172985199386054428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -567,7 +567,6 @@ MonoBehaviour:
     cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
     durantion: []
   iconURL: ui://wnbsox0hnnfh4i
-  curE: 0
   level: 0
 --- !u!114 &3910390396142548003
 MonoBehaviour:
@@ -608,7 +607,6 @@ MonoBehaviour:
     - 15
     - 15
   iconURL: ui://wnbsox0hnnfh4j
-  curE: 0
   level: 0
 --- !u!4 &4603948672408753477 stripped
 Transform:

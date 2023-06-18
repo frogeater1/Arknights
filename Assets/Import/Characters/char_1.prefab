@@ -434,7 +434,6 @@ MonoBehaviour:
     cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
     durantion: []
   iconURL: ui://wnbsox0hnnfh4i
-  curE: 0
   level: 0
 --- !u!114 &8172777638269005185
 MonoBehaviour:
@@ -465,6 +464,7 @@ MonoBehaviour:
     cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
     durantion: []
   iconURL: ui://wnbsox0hnnfh4i
+  level: 0
 --- !u!114 &6918256785717574013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -494,5 +494,4 @@ MonoBehaviour:
     cost_e: 28000000280000002800000028000000280000002800000028000000280000002800000028000000
     durantion: []
   iconURL: ui://wnbsox0hnnfh4i
-  curE: 0
   level: 0

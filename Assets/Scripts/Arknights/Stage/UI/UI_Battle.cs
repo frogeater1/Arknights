@@ -1,5 +1,6 @@
 ﻿using FairyGUI;
 using UnityEngine;
+using UnityEngine.LowLevel;
 using UnityEngine.TextCore.Text;
 
 namespace Arknights
@@ -9,7 +10,9 @@ namespace Arknights
         partial void Init()
         {
             Game.Instance.ui_battle = this;
-
+            Game.Instance.ui_online_window  = new OnlineWindow();
+            Game.Instance.ui_online_window.Show();
+            
             m_stats.visible = false;
             m_card_list.itemRenderer = RenderCard;
             m_card_list.numItems = 2;

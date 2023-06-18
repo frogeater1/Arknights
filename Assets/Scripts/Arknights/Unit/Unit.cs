@@ -4,6 +4,6 @@ namespace Arknights
 {
     public class Unit : MonoBehaviour
     {
-        public Team team;
+        public Player player;
     }
 }
