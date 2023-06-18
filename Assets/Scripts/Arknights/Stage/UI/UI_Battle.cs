@@ -10,8 +10,6 @@ namespace Arknights
         partial void Init()
         {
             Game.Instance.ui_battle = this;
-            Game.Instance.ui_online_window  = new OnlineWindow();
-            Game.Instance.ui_online_window.Show();
             
             m_stats.visible = false;
             m_card_list.itemRenderer = RenderCard;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using FairyGUI;
 using UnityEditor.VersionControl;
@@ -27,20 +28,18 @@ namespace Arknights
 
             m_tip.visible = true;
 
-            Game.Instance.me = new Player
-            {
-                team = Team.Blue,
-            };
-
             m_state.selectedPage = RoomState.create_waiting.ToString();
 
-            var res_code = await Request.CreateRoom(m_roomname.text);
+            var msg = await Request.CreateRoom(m_roomname.text);
+            var res_code = (ResCode)msg.ResCode;
             switch (res_code)
             {
                 case ResCode.Success:
                     OnCreateRoomSuccess();
-                    await Request.WaitJoinRoom();
-                    OnJoinRoomSuccess();
+                    var msg1 = await Request.WaitJoinRoom();
+                    if ((ResCode)msg1.ResCode != ResCode.Success)
+                        throw new NotImplementedException("这里不该收到非成功的消息");
+                    OnJoinRoomSuccess(msg1.Player);
                     break;
                 case ResCode.DuplicateName:
                     OnCreateRoomFail("房间名重复");
@@ -53,17 +52,14 @@ namespace Arknights
 
         private async UniTaskVoid OnJoin()
         {
-            Game.Instance.me = new Player
-            {
-                team = Team.Red,
-            };
             m_state.selectedPage = RoomState.guest_waiting.ToString();
 
-            var res_code = await Request.JoinRoom(m_roomname.text);
+            var msg = await Request.JoinRoom(m_roomname.text);
+            var res_code = (ResCode)msg.ResCode;
             switch (res_code)
             {
                 case ResCode.Success:
-                    OnJoinRoomSuccess();
+                    OnJoinRoomSuccess(msg.Player);
                     break;
                 case ResCode.CantFindRoom:
                     OnJoinRoomFail("找不到该房间");
@@ -112,11 +108,19 @@ namespace Arknights
             m_tip.visible = true;
         }
 
-        public void OnJoinRoomSuccess()
+        public void OnJoinRoomSuccess(OnlineGame.Player playerData)
         {
+            var player = new Player
+            {
+                team =  Team.Red,
+                selectCardIdxs = playerData.Cards.ToList(),
+            };
+            
             m_state.selectedPage = RoomState.start.ToString();
             m_tip.visible = false;
-            Game.Instance.ui_online_window.Hide();
+            Main.Instance.ui_online_window.Hide();
+            
+            Parking.StartBattle(Main.Instance.me, player);
         }
 
         public void OnJoinRoomFail(string tip)

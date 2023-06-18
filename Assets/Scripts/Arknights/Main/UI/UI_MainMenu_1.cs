@@ -1,4 +1,5 @@
-﻿using FairyGUI;
+﻿using System.Collections.Generic;
+using FairyGUI;
 using UnityEngine;
 
 namespace Arknights
@@ -13,8 +14,10 @@ namespace Arknights
 
         void OnClickTerminal()
         {
-            //todo: 进入Team界面选人
-            Parking.StartBattle(Main.Instance.characterPrefabs);
+            Main.Instance.ui_online_window = new OnlineWindow();
+            Main.Instance.ui_online_window.Show();
+            //todo: 进入Team界面选人,这里直接写死
+            Main.Instance.me.selectCardIdxs = new List<int> { 0, 1 };
         }
     }
 }

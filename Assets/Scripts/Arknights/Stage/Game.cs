@@ -19,9 +19,7 @@ namespace Arknights
 
         public UI_Battle ui_battle;
         public UI_DirectionSelect ui_directionSelect;
-        public OnlineWindow ui_online_window;
 
-        public Player me;
 
         public int logicFrame = 0;
 
@@ -29,9 +27,10 @@ namespace Arknights
         {
             base.Awake();
             CameraManager.Init();
-            CharacterManager.Init(); //延迟到点击创建或加入时再Init
+            CharacterManager.Init();
             PoolManager.Init();
 
+            Dispacher.SendMsg(new GameStart { Data = 1 });
             EventManager.LogicUpdate += OnLogicUpdate;
         }
 
@@ -40,22 +39,17 @@ namespace Arknights
             logicFrame++;
         }
 
-
+#if !OUTLINE_TEST
         private void Start()
         {
             //单机调试时模拟
-
-            me = new Player
-            {
-                team = Team.Blue,
-            };
 
             var t = new System.Timers.Timer();
             t.Interval = 1000f / 60;
             t.Elapsed += (sender, args) => { EventManager.CallLogicUpdate(); };
             t.Enabled = true;
         }
-
+#endif
         private void Update()
         {
             Dispacher.Distribute();

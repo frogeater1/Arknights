@@ -24,22 +24,50 @@ namespace Arknights
         };
 
 
+        // public static void MainDistribute()
+        // {
+        //     while (GetWaitingDistributeMsg() is { } msg)
+        //     {
+        //         Debug.Log(msg);
+        //         switch (msg)
+        //         {
+        //             case LogicUpdate data:
+        //                 
+        //                 break;
+        //             case create_room_s2c or join_room_s2c:
+        //                 Request.Response(msg);
+        //                 break;
+        //             case KeepAlive:
+        //                 SendMsg(new KeepAlive
+        //                 {
+        //                     Data = 1,
+        //                 });
+        //                 break;
+        //             default:
+        //                 Debug.LogError("收到错误的消息: " + msg.GetType() + msg);
+        //                 break;
+        //         }
+        //     }
+        // }
+        
+        
+        //todo:  应该分开两种，一种是大厅，一种是战斗。 不应该在
         public static void Distribute()
         {
             while (GetWaitingDistributeMsg() is { } msg)
             {
+                Debug.Log(msg);
                 switch (msg)
                 {
                     case LogicUpdate data:
-                        Type localCommanderType = typeof(LocalCommander);
-                        foreach (var rpc in data.Rpcs)
-                        {
-                            var command = rpc.Command;
-                            var method = command.Method;
-                            object[] parameters = command.Params.ToArray();
-                            localCommanderType.GetMethod(method)?.Invoke(null, parameters);
-                        }
-
+                        // Type localCommanderType = typeof(LocalCommander);
+                        // foreach (var rpc in data.Rpcs)
+                        // {
+                        //     var command = rpc.Command;
+                        //     var method = command.Method;
+                        //     object[] parameters = command.Params.ToArray();
+                        //     localCommanderType.GetMethod(method)?.Invoke(null, parameters);
+                        // }
                         EventManager.CallLogicUpdate();
                         break;
                     case create_room_s2c or join_room_s2c:
@@ -92,8 +120,8 @@ namespace Arknights
         [MenuItem("Tools/test")]
         public static void MyTest()
         {
-            var type = Type.GetType("Arknights.LocalCommander");
-            Debug.Log(type);
+            // var type = Type.GetType("Arknights.LocalCommander");
+            // Debug.Log(type);
             // waitingDistributeMsgs.Enqueue(new LogicUpdate()
             // {
             //     Rpcs =

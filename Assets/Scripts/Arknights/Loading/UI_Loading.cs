@@ -24,13 +24,13 @@ namespace Arknights
         
         public void Fade()
         {
-            Game.Instance.ui_online_window.Show();
-
-            m_curtain.TweenFade(1, 0.2f).OnComplete(() =>
-            {
-                m_stage.visible = false;
-                m_curtain.TweenFade(0, 0.5f);
-            });
+            // Main.Instance.ui_online_window.Show();
+            //
+            // m_curtain.TweenFade(1, 0.2f).OnComplete(() =>
+            // {
+            //     m_stage.visible = false;
+            //     m_curtain.TweenFade(0, 0.5f);
+            // });
         }
     }
 }

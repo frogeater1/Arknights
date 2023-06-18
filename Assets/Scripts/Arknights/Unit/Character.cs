@@ -137,9 +137,9 @@ namespace Arknights
             }
         }
 
-        public void Init()
+        public void Init(Player p)
         {
-            //tmp 暂时写死的
+            //tmp
             skinIdx = 0;
 
             if (loadData.id == "1")
@@ -162,6 +162,8 @@ namespace Arknights
             }
             //tmp end
 
+            player = p;
+            
             attackDuration = loadData.攻击间隔;
 
             skeletonAnimation.skeleton.Data.FindAnimation(loadData.attack_anim_name).Duration = attackDuration;
@@ -177,7 +179,6 @@ namespace Arknights
 
         public void 下场()
         {
-            player = Game.Instance.me;
             state = CharacterState.下场;
             EventManager.LogicUpdate += LogicUpdate;
             Map.Instance.AddUnit(this);
@@ -209,7 +210,7 @@ namespace Arknights
         private void OnMouseUpAsButton()
         {
             if (state != CharacterState.下场) return;
-            if (player.team != Game.Instance.me.team) return;
+            if (player.team != Parking.room.me.team) return;
             //必须先设置当前操作角色，否则directionSelect会找不到该在哪显示
             Game.Instance.CharacterManager.curCharacter = this;
             Game.Instance.ui_battle.CancelSelect();

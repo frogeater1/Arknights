@@ -803,7 +803,6 @@ GameObject:
   - component: {fileID: 602240192}
   - component: {fileID: 602240191}
   - component: {fileID: 602240193}
-  - component: {fileID: 602240194}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -843,7 +842,6 @@ MonoBehaviour:
   PoolManager: {fileID: 602240191}
   attackRange: {fileID: 1701363045}
   hpSpSliders: {fileID: 821424979}
-  LocalCommander: {fileID: 602240194}
   logicFrame: 0
 --- !u!114 &602240191
 MonoBehaviour:
@@ -876,6 +874,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characters: []
+  enemies: []
 --- !u!114 &602240193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -890,18 +889,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
   hpSpSliderRoot: {fileID: 821424977}
---- !u!114 &602240194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 602240188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6985141c6a54793895b4117a2400d35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &641706178
 GameObject:
   m_ObjectHideFlags: 0

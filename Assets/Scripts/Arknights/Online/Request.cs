@@ -10,60 +10,61 @@ namespace Arknights
 {
     public static class Request
     {
-        private static Dictionary<ProtoIdx, UniTaskCompletionSource<ResCode>> tasks = new()
+        private static Dictionary<ProtoIdx, UniTaskCompletionSource<IMessage>> tasks = new()
         {
-            { ProtoIdx.create_room_s2c, new UniTaskCompletionSource<ResCode>() },
-            { ProtoIdx.join_room_s2c, new UniTaskCompletionSource<ResCode>() },
+            { ProtoIdx.create_room_s2c, new UniTaskCompletionSource<IMessage>() },
+            { ProtoIdx.join_room_s2c, new UniTaskCompletionSource<IMessage>() },
         };
 
-        public static async UniTask<ResCode> CreateRoom(string roomName)
+        public static async UniTask<create_room_s2c> CreateRoom(string roomName)
         {
             Socket.Connect();
 
             Dispacher.SendMsg(new create_room_c2s
             {
                 Name = roomName,
+                Player = new OnlineGame.Player
+                {
+                    Name = Main.Instance.me.name,
+                    Cards = { Main.Instance.me.selectCardIdxs }
+                }
             });
             var source = tasks[ProtoIdx.create_room_s2c];
-            return await source.Task;
+            return (create_room_s2c)await source.Task;
         }
 
-        public static async UniTask<ResCode> JoinRoom(string roomName)
+        public static async UniTask<join_room_s2c> JoinRoom(string roomName)
         {
             Socket.Connect();
 
             Dispacher.SendMsg(new join_room_c2s
             {
                 Name = roomName,
+                Player = new OnlineGame.Player
+                {
+                    Name = Main.Instance.me.name,
+                    Cards = { Main.Instance.me.selectCardIdxs }
+                }
             });
             var source = tasks[ProtoIdx.join_room_s2c];
-            return await source.Task;
+            return (join_room_s2c)await source.Task;
         }
 
-        public static async UniTask<ResCode> WaitJoinRoom()
+        public static async UniTask<join_room_s2c> WaitJoinRoom()
         {
             Debug.Log("等待加入房间");
             var source = tasks[ProtoIdx.join_room_s2c];
-            return await source.Task;
+            return (join_room_s2c)await source.Task;
         }
 
         public static void Response(IMessage msg)
         {
-            tasks.TryGetValue(Dispacher.GetProtoIdx(msg), out var source);
-            if (source == null)
+            if (!tasks.TryGetValue(Dispacher.GetProtoIdx(msg), out var source))
             {
                 throw new Exception("收到未知消息");
             }
 
-            switch (msg)
-            {
-                case create_room_s2c data:
-                    source.TrySetResult((ResCode)data.ResCode);
-                    break;
-                case join_room_s2c data:
-                    source.TrySetResult((ResCode)data.ResCode);
-                    break;
-            }
+            source.TrySetResult(msg);
         }
 
         public static void CancelCreateRoom()
