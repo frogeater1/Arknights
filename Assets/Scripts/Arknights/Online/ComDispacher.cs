@@ -13,8 +13,11 @@ namespace Arknights
         {
             return parsers[(ProtoIdx)protoIdx].ParseFrom(bytes);
         }
+        
 
-
+        /// <summary>
+        /// 不能直接用这个发消息，只能用SendMsg入列，然后由socket中开启的线程自动发出去
+        /// </summary>
         public static void Send(NetworkStream stream, IMessage msg)
         {
             var msg_bytes = msg.ToByteArray();

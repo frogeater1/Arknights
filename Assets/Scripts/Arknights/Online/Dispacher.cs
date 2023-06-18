@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
-using Arknights;
-using Cysharp.Threading.Tasks;
 using Google.Protobuf;
-using Google.Protobuf.Collections;
-using Google.Protobuf.WellKnownTypes;
 using OnlineGame;
 using UnityEditor;
 using UnityEngine;
@@ -36,7 +31,15 @@ namespace Arknights
                 switch (msg)
                 {
                     case LogicUpdate data:
-                        LocalCommander.Execute(data);
+                        Type localCommanderType = typeof(LocalCommander);
+                        foreach (var rpc in data.Rpcs)
+                        {
+                            var command = rpc.Command;
+                            var method = command.Method;
+                            object[] parameters = command.Params.ToArray();
+                            localCommanderType.GetMethod(method)?.Invoke(null, parameters);
+                        }
+
                         EventManager.CallLogicUpdate();
                         break;
                     case create_room_s2c or join_room_s2c:
@@ -89,6 +92,24 @@ namespace Arknights
         [MenuItem("Tools/test")]
         public static void MyTest()
         {
+            var type = Type.GetType("Arknights.LocalCommander");
+            Debug.Log(type);
+            // waitingDistributeMsgs.Enqueue(new LogicUpdate()
+            // {
+            //     Rpcs =
+            //     {
+            //         new RpcMsg()
+            //         {
+            //             From = 2,
+            //             Command = new Command()
+            //             {
+            //                 Method = "下场",
+            //                 Params = { "1", "2" },
+            //             }
+            //         }
+            //     }
+            // });
+
             // var p = new string[2];
             // p[0] = "1";
             // p[1] = "2";

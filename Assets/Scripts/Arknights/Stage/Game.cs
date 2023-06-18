@@ -1,5 +1,6 @@
 ﻿using System;
 using FairyGUI;
+using OnlineGame;
 using UnityEngine;
 
 namespace Arknights
@@ -20,7 +21,6 @@ namespace Arknights
         public UI_DirectionSelect ui_directionSelect;
         public OnlineWindow ui_online_window;
 
-
         public Player me;
 
         public int logicFrame = 0;
@@ -31,6 +31,7 @@ namespace Arknights
             CameraManager.Init();
             CharacterManager.Init(); //延迟到点击创建或加入时再Init
             PoolManager.Init();
+
             EventManager.LogicUpdate += OnLogicUpdate;
         }
 
@@ -57,7 +58,6 @@ namespace Arknights
 
         private void Update()
         {
-            Debug.Log("update");
             Dispacher.Distribute();
         }
     }

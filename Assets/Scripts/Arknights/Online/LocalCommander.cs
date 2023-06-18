@@ -3,11 +3,12 @@ using UnityEngine;
 
 namespace Arknights
 {
-    public class LocalCommander
+    public static class LocalCommander 
     {
-        public static void Execute(LogicUpdate data)
+        public static void 下场()
         {
-           Debug.Log("execute");
+            
         }
+        
     }
 }
