@@ -62,13 +62,12 @@ namespace Arknights
         {
             while (GetWaitingDistributeMsg() is { } msg)
             {
-                Debug.Log(msg);
                 switch (msg)
                 {
                     case LogicUpdate data:
-                        Type localCommanderType = typeof(LocalCommander);
                         foreach (var rpc in data.Rpcs)
                         {
+                            Debug.Log(rpc);
                             if (rpc.Command.Is(Command_Enter.Descriptor))
                             {
                                 var command = rpc.Command.Unpack<Command_Enter>();
@@ -80,6 +79,7 @@ namespace Arknights
                             }
                         }
 
+                        Game.Instance.logicFrame++;
                         EventManager.CallLogicUpdate();
                         break;
                     case create_room_s2c or join_room_s2c:
@@ -136,7 +136,6 @@ namespace Arknights
                 lock (waitingDistributeMsgs)
                 {
                     waitingDistributeMsgs.Enqueue(msg);
-                    Debug.Log(waitingDistributeMsgs.TryPeek(out var result) ? result.ToString() : "null");
                 }
             }
         }

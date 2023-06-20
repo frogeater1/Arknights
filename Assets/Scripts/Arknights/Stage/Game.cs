@@ -35,14 +35,8 @@ namespace Arknights
             me = Parking.room.players[Parking.meId - 1];
 
             Dispacher.SendMsg(new GameStart { Data = 1 });
-            EventManager.LogicUpdate += OnLogicUpdate;
         }
-
-        private void OnLogicUpdate()
-        {
-            logicFrame++;
-        }
-
+        
 #if OUTLINE_TEST
         //单机调试时模拟
         public Timer t;

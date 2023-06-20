@@ -14,7 +14,6 @@ namespace Arknights
 {
     public class Character : Unit
     {
-
         public Data.Character loadData;
 
         public string[] avatarURLs;
@@ -22,10 +21,10 @@ namespace Arknights
         public string[] dragImgURLs;
 
         public string[] tachieURLs;
-        
+
 
         public Skills.Skill[] skills;
-        
+
 
         public float attackDuration; //普攻时间
         public float skillDuration; //技能时间 //注意这个技能持续时间是放哪个技能时动态设置的
@@ -35,7 +34,7 @@ namespace Arknights
 
         ///以下是战斗中临时的数据
         public int cardListIdx; //在卡盒中的索引
-        
+
         //之前是朝左还是朝右,不保存上下,默认朝右,选择UI用的的，不是真正的方向，不要用来判断朝向
         private 方向 oldSelectDir = 方向.右;
 
@@ -51,9 +50,10 @@ namespace Arknights
 
         private Unit target;
 
-        public float spTiming = 0;
-        public float attackTiming = 0;
-        public float skillTiming = 0;
+        public bool finishedSkill = false;
+        public int spTiming = 0;
+        public int attackTiming = 0;
+        public int skillTiming = 0;
 
 #if UNITY_EDITOR
         public void Load(Data.Character data)
@@ -96,7 +96,7 @@ namespace Arknights
             skills = list.ToArray();
         }
 #endif
-        
+
         public void Init(Player p)
         {
             //tmp
@@ -111,7 +111,7 @@ namespace Arknights
             {
                 skillIdx = 3;
             }
-            
+
             foreach (var s in skills)
             {
                 if (s is 主动)
@@ -123,7 +123,7 @@ namespace Arknights
             //tmp end
 
             player = p;
-            
+
             attackDuration = loadData.攻击间隔;
 
             skeletonAnimation.skeleton.Data.FindAnimation(loadData.attack_anim_name).Duration = attackDuration;
@@ -137,17 +137,16 @@ namespace Arknights
             maxSp = curSkill.loadData.cost_e[curSkill.level - 1];
             curSp = curSkill.loadData.start_e[curSkill.level - 1];
         }
-        
-        
+
+
         public void FixedPos(int logicX, int logicZ)
         {
             logicPos = new Vector2Int(logicX, logicZ);
             var grid_type = Map.Instance.GetGrid(logicX, logicZ)?.type;
             transform.position = new Vector3(logicX + 0.5f, grid_type == GridType.站人高台 ? 0.6f : 0, logicZ + 0.3f);
         }
-        
-        
-        
+
+
         //这里不接收事件而是手动调用，因为方向会影响攻击范围，改变了实际逻辑。
         public void ChangeDirection(方向 dir)
         {
@@ -174,7 +173,7 @@ namespace Arknights
                     break;
             }
         }
-        
+
 
         public void Enter()
         {
@@ -244,7 +243,7 @@ namespace Arknights
                     spTiming = Game.Instance.logicFrame;
                 }
             }
-            
+
             //判断攻击和移动
             if (isSkilling)
             {
@@ -255,16 +254,25 @@ namespace Arknights
             }
             else if (isAttacking)
             {
+                if (finishedSkill == false && Game.Instance.logicFrame - attackTiming >= 40 * attackDuration)
+                {
+                    //等40逻辑帧的前摇再真正攻击
+                    skills[0].Use(this, target);
+                    finishedSkill = true;
+                }
+
                 if (Game.Instance.logicFrame - attackTiming >= 60 * attackDuration)
                 {
                     isAttacking = false;
+                    finishedSkill = false;
+                    skeletonAnimation.state.TimeScale = 1;
                 }
             }
 
             if (isSkilling || isAttacking) return;
 
             if (!target)
-                SeekTarget();
+                target = SeekTarget();
             if (target)
             {
                 Attack();
@@ -286,20 +294,22 @@ namespace Arknights
         private void Attack()
         {
             skeletonAnimation.state.SetAnimation(0, loadData.attack_anim_name, false);
+            skeletonAnimation.state.TimeScale = attackDuration;
             attackTiming = Game.Instance.logicFrame;
             isAttacking = true;
-            skills[0].Use(this, target);
         }
 
-        private void SeekTarget()
+        private Unit SeekTarget()
         {
             foreach (var range in attackRange)
             {
                 var logicGrid = Map.Instance.CalculPos(logicPos, attackDir, range);
                 target = Map.Instance.CheckGrid(logicGrid, player.team == Team.Blue ? Team.Red : Team.Blue);
                 if (target)
-                    break;
+                    return target;
             }
+
+            return null;
         }
     }
 }
