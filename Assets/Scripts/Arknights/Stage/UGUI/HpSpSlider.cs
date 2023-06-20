@@ -8,10 +8,12 @@ namespace Arknights.UGUI
     {
         public Character character;
         private Slider slider;
+        private Image imageFill;
 
         private void Awake()
         {
             slider = GetComponent<Slider>();
+            imageFill = slider.fillRect.GetComponent<Image>();
         }
 
         public void Update()
@@ -35,7 +37,14 @@ namespace Arknights.UGUI
         public void Init(Character character)
         {
             this.character = character;
-            slider = GetComponent<Slider>();
+            if (character.player == Game.Instance.me)
+            {
+                imageFill.color = Color.green;
+            }
+            else
+            {
+                imageFill.color = Color.red;
+            }
             Follow();
         }
     }

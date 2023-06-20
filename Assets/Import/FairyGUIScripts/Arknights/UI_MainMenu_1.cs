@@ -9,7 +9,7 @@ namespace Arknights
     {
         public Controller m_c1;
         public UI_Button_white m_Terminal;
-        public UI_Button_white m_n13;
+        public UI_Button_white m_Team;
         public UI_Button_blue m_n18;
         public UI_Button_white m_n21;
         public UI_Button_white m_n22;
@@ -77,7 +77,7 @@ namespace Arknights
 
             m_c1 = GetControllerAt(0);
             m_Terminal = (UI_Button_white)GetChildAt(0);
-            m_n13 = (UI_Button_white)GetChildAt(1);
+            m_Team = (UI_Button_white)GetChildAt(1);
             m_n18 = (UI_Button_blue)GetChildAt(2);
             m_n21 = (UI_Button_white)GetChildAt(3);
             m_n22 = (UI_Button_white)GetChildAt(4);

@@ -10,27 +10,31 @@ namespace Arknights
 {
     public static class Parking
     {
-        public static List<Character> characterPrefabs = new (); //进入战斗时的队伍成员prefab
-        public static List<Character> enemiesPrefabs = new (); //进入战斗时的队伍成员prefab
+        public static List<Character>[] prefabs = new List<Character>[2];
 
         public static Room room;
+        public static int meId;
 
-        public static void StartBattle(Player player1, Player player2)
+        public static void StartBattle(Player p1, Player p2, int me)
         {
             room = new Room
             {
-                me = player1,
-                enemy = player2,
+                players = new[] { p1, p2 },
             };
-            foreach (int id in player1.selectCardIdxs)
-            { 
+
+            meId = me;
+            prefabs[0] = new List<Character>();
+            foreach (int id in p1.selectCardIdxs)
+            {
                 var prefab = Main.Instance.characterPrefabs[id];
-                characterPrefabs.Add(prefab);
+                prefabs[0].Add(prefab);
             }
 
-            foreach (int id in player2.selectCardIdxs)
+            prefabs[1] = new List<Character>();
+            foreach (int id in p2.selectCardIdxs)
             {
-                enemiesPrefabs.Add(Main.Instance.characterPrefabs[id]);
+                var prefab = Main.Instance.characterPrefabs[id];
+                prefabs[1].Add(prefab);
             }
 
             LoadScene("Stage").Forget();

@@ -22,8 +22,12 @@ namespace Arknights
             set
             {
                 base.selected = value;
-                Map.Instance.decal_地面.SetActive(value && (character.loadData.部署类型 == 部署类型.地面 || character.loadData.部署类型 == 部署类型.Both));
-                Map.Instance.decal_高台.SetActive(value && (character.loadData.部署类型 == 部署类型.高台 || character.loadData.部署类型 == 部署类型.Both));
+                Map.Instance.decal_地面.SetActive(value &&
+                                                (character.loadData.部署类型 == 部署类型.地面 ||
+                                                 character.loadData.部署类型 == 部署类型.Both));
+                Map.Instance.decal_高台.SetActive(value &&
+                                                (character.loadData.部署类型 == 部署类型.高台 ||
+                                                 character.loadData.部署类型 == 部署类型.Both));
                 if (value)
                 {
                     Game.Instance.CharacterManager.curCharacter = this.character;
@@ -42,7 +46,7 @@ namespace Arknights
         public void Render(int index)
         {
             idx = index;
-            character = Game.Instance.CharacterManager.characters[index];
+            character = Game.Instance.CharacterManager.characters[Parking.meId - 1][index];
             character.cardListIdx = idx;
             icon = character.avatarURLs[character.skinIdx];
             m_职业icon.SetSelectedPage(character.loadData.职业.ToString());
@@ -128,6 +132,7 @@ namespace Arknights
                 if (moving) //这里是为了解决和click同时触发的问题
                 {
                     moving = false;
+                    Game.Instance.CharacterManager.curCharacter = null;
                     Game.Instance.ui_battle.m_card_list.selectedIndex = -1;
                 }
             }

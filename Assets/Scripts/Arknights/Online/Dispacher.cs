@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
+using Cysharp.Threading.Tasks;
 using Google.Protobuf;
 using OnlineGame;
 using UnityEditor;
@@ -14,6 +15,11 @@ namespace Arknights
     {
         private static ConcurrentQueue<IMessage> waitingSendMsgs = new();
         private static ConcurrentQueue<IMessage> waitingDistributeMsgs = new();
+
+#if OUTLINE_TEST
+        public static Queue<RpcMsg> rpcMsgs = new();
+        public static Queue<LogicUpdate> logicUpdateMsgs = new();
+#endif
 
         public static Dictionary<ProtoIdx, MessageParser> parsers = new()
         {
@@ -49,8 +55,8 @@ namespace Arknights
         //         }
         //     }
         // }
-        
-        
+
+
         //todo:  应该分开两种，一种是大厅，一种是战斗。 不应该在
         public static void Distribute()
         {
@@ -60,14 +66,21 @@ namespace Arknights
                 switch (msg)
                 {
                     case LogicUpdate data:
-                        // Type localCommanderType = typeof(LocalCommander);
-                        // foreach (var rpc in data.Rpcs)
-                        // {
-                        //     var command = rpc.Command;
-                        //     var method = command.Method;
-                        //     object[] parameters = command.Params.ToArray();
-                        //     localCommanderType.GetMethod(method)?.Invoke(null, parameters);
-                        // }
+                        Type localCommanderType = typeof(LocalCommander);
+                        foreach (var rpc in data.Rpcs)
+                        {
+                            if (rpc.Command.Is(Command_Enter.Descriptor))
+                            {
+                                var command = rpc.Command.Unpack<Command_Enter>();
+                                LocalCommander.Enter(rpc.From, command);
+                            }
+                            else if (rpc.Command.Is(Command_Exit.Descriptor))
+                            {
+                                var command = rpc.Command.Unpack<Command_Exit>();
+                                
+                            }
+                        }
+
                         EventManager.CallLogicUpdate();
                         break;
                     case create_room_s2c or join_room_s2c:
@@ -93,9 +106,14 @@ namespace Arknights
             return result;
         }
 
+
         public static IMessage GetWaitingDistributeMsg()
         {
+#if OUTLINE_TEST
+            logicUpdateMsgs.TryDequeue(out var result);
+#else
             waitingDistributeMsgs.TryDequeue(out var result);
+#endif
             return result;
         }
 
@@ -162,18 +180,7 @@ namespace Arknights
             // CancellationToken token = new CancellationToken();
             // var source = new UniTaskCompletionSource();
             //
-            // async UniTaskVoid Test1()
-            // {
-            //     Debug.Log("test1");
-            // }
-            //
-            // async UniTaskVoid Test2()
-            // {
-            //     await UniTask.Delay(3000);
-            //     source.TrySetCanceled(token);
-            // }
-            //
-            //
+
 
             // create_room_c2s msg1 = new create_room_c2s()
             // {

@@ -2,8 +2,7 @@
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using FairyGUI;
-using UnityEditor.VersionControl;
-using UnityEngine;
+using OnlineGame;
 
 namespace Arknights
 {
@@ -31,7 +30,7 @@ namespace Arknights
             m_state.selectedPage = RoomState.create_waiting.ToString();
 
             var msg = await Request.CreateRoom(m_roomname.text);
-            var res_code = (ResCode)msg.ResCode;
+            var res_code = msg.ResCode;
             switch (res_code)
             {
                 case ResCode.Success:
@@ -39,7 +38,19 @@ namespace Arknights
                     var msg1 = await Request.WaitJoinRoom();
                     if ((ResCode)msg1.ResCode != ResCode.Success)
                         throw new NotImplementedException("这里不该收到非成功的消息");
-                    OnJoinRoomSuccess(msg1.Player);
+
+                    Main.Instance.me.playerId = 1;
+                    Main.Instance.me.team= Team.Blue;
+                    
+                    var player2 = new Player
+                    {
+                        playerId = 2,
+                        team = Team.Red,
+                        name = msg1.Player.Name,
+                        selectCardIdxs = msg1.Player.Cards.ToList(),
+                    };
+
+                    OnJoinRoomSuccess(Main.Instance.me, player2, 1);
                     break;
                 case ResCode.DuplicateName:
                     OnCreateRoomFail("房间名重复");
@@ -59,7 +70,16 @@ namespace Arknights
             switch (res_code)
             {
                 case ResCode.Success:
-                    OnJoinRoomSuccess(msg.Player);
+                    var player1 = new Player
+                    {
+                        playerId = 1,
+                        team = Team.Blue,
+                        name = msg.Player.Name,
+                        selectCardIdxs = msg.Player.Cards.ToList(),
+                    };
+                    Main.Instance.me.playerId = 2;
+                    Main.Instance.me.team= Team.Red;
+                    OnJoinRoomSuccess(player1, Main.Instance.me, 2);
                     break;
                 case ResCode.CantFindRoom:
                     OnJoinRoomFail("找不到该房间");
@@ -108,19 +128,13 @@ namespace Arknights
             m_tip.visible = true;
         }
 
-        public void OnJoinRoomSuccess(OnlineGame.Player playerData)
+        public void OnJoinRoomSuccess(Player player1, Player player2, int meId)
         {
-            var player = new Player
-            {
-                team =  Team.Red,
-                selectCardIdxs = playerData.Cards.ToList(),
-            };
-            
             m_state.selectedPage = RoomState.start.ToString();
             m_tip.visible = false;
             Main.Instance.ui_online_window.Hide();
-            
-            Parking.StartBattle(Main.Instance.me, player);
+
+            Parking.StartBattle(player1, player2, meId);
         }
 
         public void OnJoinRoomFail(string tip)

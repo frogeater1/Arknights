@@ -44,7 +44,7 @@ namespace Arknights
         private 方向 oldSelectDir = 方向.右;
 
 
-        private 方向 attackDir = 方向.右; //这个是角色攻击朝向，用来计算攻击范围的，跟上面那个没关系,高台单位在下场时即固定，地面单位为实际移动的方向，注意跟动画方向无关。
+        public 方向 attackDir = 方向.右; //这个是角色攻击朝向，用来计算攻击范围的，跟上面那个没关系,高台单位在下场时即固定，地面单位为实际移动的方向，注意跟动画方向无关。
 
         private CharacterState state = CharacterState.手牌;
 
@@ -108,35 +108,7 @@ namespace Arknights
             skills = list.ToArray();
         }
 #endif
-
-
-        //这里不接收事件而是手动调用，因为方向会影响攻击范围，改变了实际逻辑。
-        public void ChangeDirection(方向 dir)
-        {
-            switch (dir)
-            {
-                case 方向.右:
-                    attackDir = dir;
-                    skeletonAnimation.skeleton.ScaleX = 1;
-                    oldSelectDir = dir;
-                    break;
-                case 方向.左:
-                    attackDir = dir;
-                    oldSelectDir = dir;
-                    skeletonAnimation.skeleton.ScaleX = -1;
-                    break;
-                case 方向.上:
-                    attackDir = dir;
-                    //切换成背面的spine，暂时只有正面的
-                    skeletonAnimation.skeleton.ScaleX = oldSelectDir == 方向.右 ? 1 : -1;
-                    break;
-                case 方向.下:
-                    attackDir = dir;
-                    skeletonAnimation.skeleton.ScaleX = oldSelectDir == 方向.右 ? 1 : -1;
-                    break;
-            }
-        }
-
+        
         public void Init(Player p)
         {
             //tmp
@@ -176,10 +148,48 @@ namespace Arknights
             maxSp = curSkill.loadData.cost_e[curSkill.level - 1];
             curSp = curSkill.loadData.start_e[curSkill.level - 1];
         }
-
-        public void 下场()
+        
+        
+        public void FixedPos(int logicX, int logicZ)
         {
-            state = CharacterState.下场;
+            logicPos = new Vector2Int(logicX, logicZ);
+            var grid_type = Map.Instance.GetGrid(logicX, logicZ)?.type;
+            transform.position = new Vector3(logicX + 0.5f, grid_type == GridType.站人高台 ? 0.6f : 0, logicZ + 0.3f);
+        }
+        
+        
+        
+        //这里不接收事件而是手动调用，因为方向会影响攻击范围，改变了实际逻辑。
+        public void ChangeDirection(方向 dir)
+        {
+            switch (dir)
+            {
+                case 方向.右:
+                    attackDir = dir;
+                    skeletonAnimation.skeleton.ScaleX = 1;
+                    oldSelectDir = dir;
+                    break;
+                case 方向.左:
+                    attackDir = dir;
+                    oldSelectDir = dir;
+                    skeletonAnimation.skeleton.ScaleX = -1;
+                    break;
+                case 方向.上:
+                    attackDir = dir;
+                    //切换成背面的spine，暂时只有正面的
+                    skeletonAnimation.skeleton.ScaleX = oldSelectDir == 方向.右 ? 1 : -1;
+                    break;
+                case 方向.下:
+                    attackDir = dir;
+                    skeletonAnimation.skeleton.ScaleX = oldSelectDir == 方向.右 ? 1 : -1;
+                    break;
+            }
+        }
+        
+
+        public void Enter()
+        {
+            state = CharacterState.场中;
             EventManager.LogicUpdate += LogicUpdate;
             Map.Instance.AddUnit(this);
             Game.Instance.hpSpSliders.ShowHpSp(this);
@@ -198,26 +208,27 @@ namespace Arknights
                 当前部署类型 = loadData.部署类型;
             }
 
-
+            skeletonAnimation.timeScale = 2;
             skeletonAnimation.state.SetAnimation(0, "Start", false);
             //播放完毕后切到idle
             skeletonAnimation.state.Complete += (trackEntry) =>
             {
+                skeletonAnimation.timeScale = 1;
                 skeletonAnimation.state.SetAnimation(0, "Idle", true);
             };
         }
 
         private void OnMouseUpAsButton()
         {
-            if (state != CharacterState.下场) return;
-            if (player.team != Parking.room.me.team) return;
+            if (state != CharacterState.场中) return;
+            if (player.team != Game.Instance.me.team) return;
             //必须先设置当前操作角色，否则directionSelect会找不到该在哪显示
             Game.Instance.CharacterManager.curCharacter = this;
             Game.Instance.ui_battle.CancelSelect();
             Game.Instance.ui_directionSelect.ShowCtrl(this);
         }
 
-        public void 回收()
+        public void Exit()
         {
             EventManager.LogicUpdate -= LogicUpdate;
             Map.Instance.RemoveUnit(this);
@@ -300,13 +311,6 @@ namespace Arknights
                 if (target)
                     break;
             }
-        }
-
-        public void FixedPos(int logicX, int logicZ)
-        {
-            logicPos = new Vector2Int(logicX, logicZ);
-            var grid_type = Map.Instance.GetGrid(logicX, logicZ)?.type;
-            transform.position = new Vector3(logicX + 0.5f, grid_type == GridType.站人高台 ? 0.6f : 0, logicZ + 0.3f);
         }
     }
 }

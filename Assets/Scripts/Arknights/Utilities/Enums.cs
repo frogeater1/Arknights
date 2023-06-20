@@ -61,7 +61,7 @@ public enum 方向
 public enum CharacterState
 {
     手牌,
-    下场
+    场中
 }
 
 public enum Team
@@ -69,14 +69,6 @@ public enum Team
     Blue,
     Red,
     Neutral,
-}
-
-public enum ResCode
-{
-    Success = 1,
-    DuplicateName = 2,
-    CantFindRoom = 3,
-    RoomIsFull = 4,
 }
 
 public enum RoomState

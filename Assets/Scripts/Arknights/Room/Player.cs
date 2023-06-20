@@ -4,8 +4,9 @@ namespace Arknights
 {
     public class Player
     {
-        public Team team;
+        public int playerId;
         public string name;
+        public Team team;
         public List<int> selectCardIdxs = new();
     }
 }

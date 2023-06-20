@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Timers;
 using FairyGUI;
 using OnlineGame;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace Arknights
         public UI_Battle ui_battle;
         public UI_DirectionSelect ui_directionSelect;
 
+        public Player me;
 
         public int logicFrame = 0;
 
@@ -30,6 +32,8 @@ namespace Arknights
             CharacterManager.Init();
             PoolManager.Init();
 
+            me = Parking.room.players[Parking.meId - 1];
+
             Dispacher.SendMsg(new GameStart { Data = 1 });
             EventManager.LogicUpdate += OnLogicUpdate;
         }
@@ -39,14 +43,34 @@ namespace Arknights
             logicFrame++;
         }
 
-#if !OUTLINE_TEST
+#if OUTLINE_TEST
+        //单机调试时模拟
+        public Timer t;
+        private void OnDisable()
+        {
+            t.Close();
+        }
         private void Start()
         {
-            //单机调试时模拟
-
-            var t = new System.Timers.Timer();
+            t = new Timer();
             t.Interval = 1000f / 60;
-            t.Elapsed += (sender, args) => { EventManager.CallLogicUpdate(); };
+            t.Elapsed += (sender, args) =>
+            {
+                Debug.Log("update");
+
+                RpcMsg[] rpcs;
+                lock (Dispacher.rpcMsgs)
+                {
+                    rpcs = (Dispacher.rpcMsgs.ToArray());
+                    Dispacher.rpcMsgs.Clear();
+                }
+
+                Dispacher.logicUpdateMsgs.Enqueue(new LogicUpdate()
+                {
+                    Rpcs = { rpcs },
+                });
+            };
+
             t.Enabled = true;
         }
 #endif

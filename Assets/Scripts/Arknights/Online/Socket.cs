@@ -55,7 +55,7 @@ namespace Arknights
                             //循环把待发送队列里的消息发出去
                             while (Dispacher.GetWaitingSendMsg() is { } msg)
                             {
-                                Debug.Log(msg);
+                                Debug.Log(msg.GetType().ToString() + msg);
                                 Dispacher.Send(client.GetStream(), msg);
                             }
                         }
