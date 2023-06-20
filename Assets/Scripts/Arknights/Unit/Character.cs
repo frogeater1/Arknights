@@ -22,12 +22,10 @@ namespace Arknights
         public string[] dragImgURLs;
 
         public string[] tachieURLs;
-
-        public List<Vector2Int> attackRange;
+        
 
         public Skills.Skill[] skills;
-
-        public SkeletonAnimation skeletonAnimation;
+        
 
         public float attackDuration; //普攻时间
         public float skillDuration; //技能时间 //注意这个技能持续时间是放哪个技能时动态设置的
@@ -37,14 +35,9 @@ namespace Arknights
 
         ///以下是战斗中临时的数据
         public int cardListIdx; //在卡盒中的索引
-
-        public 部署类型 当前部署类型;
-
-        //之前是朝左还是朝右,不保存上下,默认朝右,用来选择的
+        
+        //之前是朝左还是朝右,不保存上下,默认朝右,选择UI用的的，不是真正的方向，不要用来判断朝向
         private 方向 oldSelectDir = 方向.右;
-
-
-        public 方向 attackDir = 方向.右; //这个是角色攻击朝向，用来计算攻击范围的，跟上面那个没关系,高台单位在下场时即固定，地面单位为实际移动的方向，注意跟动画方向无关。
 
         private CharacterState state = CharacterState.手牌;
 
@@ -52,16 +45,11 @@ namespace Arknights
         private bool isSkilling = false; //正在放技能中
         private bool isAttacking = false; //正在普攻中
 
-        public Vector2Int logicPos;
-
         public Skill curSkill;
         public int curSp;
         public int maxSp;
-        public int curHp;
-        public int maxHp;
 
         private Unit target;
-        public HpSpSlider hpspSlider;
 
         public float spTiming = 0;
         public float attackTiming = 0;
@@ -140,6 +128,7 @@ namespace Arknights
 
             skeletonAnimation.skeleton.Data.FindAnimation(loadData.attack_anim_name).Duration = attackDuration;
 
+            attack = loadData.攻击力;
             maxHp = loadData.生命上限;
             curHp = maxHp;
 
@@ -299,7 +288,7 @@ namespace Arknights
             skeletonAnimation.state.SetAnimation(0, loadData.attack_anim_name, false);
             attackTiming = Game.Instance.logicFrame;
             isAttacking = true;
-            skills[0].Use(target);
+            skills[0].Use(this, target);
         }
 
         private void SeekTarget()

@@ -11,7 +11,7 @@ namespace Arknights.Skills
         public int level;
 
 
-        public abstract void Use(Unit target = null);
+        public abstract void Use(Unit self, Unit target = null);
 
 #if UNITY_EDITOR
 
@@ -21,6 +21,5 @@ namespace Arknights.Skills
             loadData = skill;
         }
 #endif
-        
     }
 }

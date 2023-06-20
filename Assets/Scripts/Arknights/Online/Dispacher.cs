@@ -77,7 +77,6 @@ namespace Arknights
                             else if (rpc.Command.Is(Command_Exit.Descriptor))
                             {
                                 var command = rpc.Command.Unpack<Command_Exit>();
-                                
                             }
                         }
 
@@ -111,10 +110,14 @@ namespace Arknights
         {
 #if OUTLINE_TEST
             logicUpdateMsgs.TryDequeue(out var result);
-#else
-            waitingDistributeMsgs.TryDequeue(out var result);
-#endif
             return result;
+#else
+            lock (waitingDistributeMsgs)
+            {
+                waitingDistributeMsgs.TryDequeue(out var result);
+                return result;
+            }
+#endif
         }
 
 
@@ -130,7 +133,11 @@ namespace Arknights
             while (true)
             {
                 var msg = Receive(stream);
-                waitingDistributeMsgs.Enqueue(msg);
+                lock (waitingDistributeMsgs)
+                {
+                    waitingDistributeMsgs.Enqueue(msg);
+                    Debug.Log(waitingDistributeMsgs.TryPeek(out var result) ? result.ToString() : "null");
+                }
             }
         }
 
@@ -138,62 +145,13 @@ namespace Arknights
         [MenuItem("Tools/test")]
         public static void MyTest()
         {
-            // var type = Type.GetType("Arknights.LocalCommander");
-            // Debug.Log(type);
-            // waitingDistributeMsgs.Enqueue(new LogicUpdate()
-            // {
-            //     Rpcs =
-            //     {
-            //         new RpcMsg()
-            //         {
-            //             From = 2,
-            //             Command = new Command()
-            //             {
-            //                 Method = "下场",
-            //                 Params = { "1", "2" },
-            //             }
-            //         }
-            //     }
-            // });
+            Socket.Connect();
+        }
 
-            // var p = new string[2];
-            // p[0] = "1";
-            // p[1] = "2";
-            // var a = new RpcMsg()
-            // {
-            //     From = 0,
-            //     Command = new Command()
-            //     {
-            //         Method = "test",
-            //         Params = { p },
-            //     }
-            // };
-            //
-            // var z = a.ToByteArray();
-            // var b = RpcMsg.Parser.ParseFrom(z);
-            // Debug.Log(b.Command.Params);
-
-
-            // var s = Google.Protobuf.WellKnownTypes.Any.Pack("1");
-
-
-            // CancellationToken token = new CancellationToken();
-            // var source = new UniTaskCompletionSource();
-            //
-
-
-            // create_room_c2s msg1 = new create_room_c2s()
-            // {
-            //     Name = "测试房间",
-            // };
-            //
-            // waittingSendQueue.Enqueue(msg1);
-            //
-            // while (GetWaittingMsg() is { } msg)
-            // {
-            //    Debug.Log("msg: " + msg);
-            // }
-            // Debug.Log("end");
+        [MenuItem("Tools/test1")]
+        public static void MyTest1()
+        {
+            Socket.Disconnect();
         }
     }
 }
