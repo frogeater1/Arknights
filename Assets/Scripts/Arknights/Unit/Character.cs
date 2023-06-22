@@ -220,9 +220,9 @@ namespace Arknights
         private void OnMouseUpAsButton()
         {
             if (player.team != Game.Instance.me.team) return;
+            Game.Instance.ui_battle.CancelSelect();
             //必须先设置当前操作角色，否则directionSelect会找不到该在哪显示
             Game.Instance.CharacterManager.curCharacter = this;
-            Game.Instance.ui_battle.CancelSelect();
             Game.Instance.ui_directionSelect.ShowCtrl(this);
         }
 

@@ -23,6 +23,7 @@ namespace Arknights
         public GLoader m_elite_lv;
         public GImage m_cooldown;
         public GTextField m_cooldowntext;
+        public GGroup m_n36;
         public const string URL = "ui://wnbsox0hoeh33g";
 
         public static UI_Button_角色卡 CreateInstance()
@@ -50,6 +51,7 @@ namespace Arknights
             m_elite_lv = (GLoader)GetChildAt(10);
             m_cooldown = (GImage)GetChildAt(11);
             m_cooldowntext = (GTextField)GetChildAt(12);
+            m_n36 = (GGroup)GetChildAt(13);
             Init();
         }
         partial void Init();

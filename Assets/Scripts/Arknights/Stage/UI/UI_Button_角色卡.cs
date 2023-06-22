@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using FairyGUI;
+using UnityEditor.Timeline;
 using UnityEngine;
 
 namespace Arknights
@@ -15,6 +16,8 @@ namespace Arknights
         private bool canSet;
 
         private bool moving;
+
+        private bool canTouch;
         // private Vector2Int oldGridPos = new(-1, -1); //缓存上一次的格子坐标，如果没变就不做后面的操作了
 
         public override bool selected
@@ -23,24 +26,20 @@ namespace Arknights
             set
             {
                 base.selected = value;
-                Map.Instance.decal_地面.SetActive(value &&
-                                                (character.loadData.部署类型 == 部署类型.地面 ||
-                                                 character.loadData.部署类型 == 部署类型.Both));
-                Map.Instance.decal_高台.SetActive(value &&
-                                                (character.loadData.部署类型 == 部署类型.高台 ||
-                                                 character.loadData.部署类型 == 部署类型.Both));
-                if (value)
-                {
-                    Game.Instance.CharacterManager.curCharacter = this.character;
-                }
+                Map.Instance.decal_地面.SetActive(value && character.loadData.部署类型 is 部署类型.地面 or 部署类型.Both);
+                Map.Instance.decal_高台.SetActive(value && character.loadData.部署类型 is 部署类型.高台 or 部署类型.Both);
+                Game.Instance.CharacterManager.curCharacter = value ? this.character : null;
             }
         }
 
         partial void Init()
         {
-            onTouchBegin.Add(__touchBegin);
-            onTouchMove.Add(__touchMove);
-            onTouchEnd.Add(__touchEnd);
+            onTouchBegin.Set(__touchBegin);
+            onTouchMove.Set(__touchMove);
+            onTouchEnd.Set(__touchEnd);
+            canTouch = true;
+
+
             changeStateOnClick = false;
         }
 
@@ -147,12 +146,26 @@ namespace Arknights
             {
                 m_cooldowntext.visible = true;
                 m_cooldowntext.text = character.lastCoolDown.ToString();
+                if (canTouch)
+                {
+                    onTouchBegin.Remove(__touchBegin);
+                    onTouchMove.Remove(__touchMove);
+                    onTouchEnd.Remove(__touchEnd);
+                    canTouch = false;
+                }
             }
             else
             {
                 m_cooldowntext.visible = false;
+                if (!canTouch)
+                {
+                    onTouchBegin.Set(__touchBegin);
+                    onTouchMove.Set(__touchMove);
+                    onTouchEnd.Set(__touchEnd);
+                    canTouch = true;
+                }
             }
-            
+
             m_cooldown.fillAmount = character.lastCoolDown / character.coolDown;
         }
     }

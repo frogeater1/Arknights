@@ -15,13 +15,6 @@ namespace Arknights
             m_card_list.itemRenderer = RenderCard;
             m_card_list.numItems = 2;
             m_card_list.ResizeToFit();
-            
-            m_card_list.onClickItem.Add(__clickCard);
-        }
-
-        private void __clickCard(EventContext context)
-        {
-            Debug.Log(context.data);
         }
 
         public void CancelSelect()
