@@ -157,7 +157,7 @@ namespace Arknights.Data
             System.IO.File.WriteAllBytes(Application.dataPath + "/Resources/Textures/texture_高台.png",
                 texture_高台.EncodeToPNG());
 
-            // var cur_scene_path = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().path;
+            var cur_scene_path = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().path;
             var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Stage.unity");
             foreach (var obj in Object.FindObjectsOfType<MonoBehaviour>().OfType<ILoadable>())
             {
@@ -167,7 +167,7 @@ namespace Arknights.Data
             //保存并打开之前的场景
             UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);
             UnityEditor.SceneManagement.EditorSceneManager.SaveOpenScenes();
-            // UnityEditor.SceneManagement.EditorSceneManager.OpenScene(cur_scene_path);
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene(cur_scene_path);
         }
     }
 }

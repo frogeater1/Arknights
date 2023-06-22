@@ -166,17 +166,17 @@ PrefabInstance:
         type: 3}
       propertyPath: skills.Array.data[0]
       value: 
-      objectReference: {fileID: 1100477556337834436}
+      objectReference: {fileID: 946884157443223579}
     - target: {fileID: -5162368791788645039, guid: edb2e07cc16d6aa44b47032c770b3393,
         type: 3}
       propertyPath: skills.Array.data[1]
       value: 
-      objectReference: {fileID: 8172777638269005185}
+      objectReference: {fileID: 7579087935054704436}
     - target: {fileID: -5162368791788645039, guid: edb2e07cc16d6aa44b47032c770b3393,
         type: 3}
       propertyPath: skills.Array.data[2]
       value: 
-      objectReference: {fileID: 6918256785717574013}
+      objectReference: {fileID: 1692129278402762113}
     - target: {fileID: -5162368791788645039, guid: edb2e07cc16d6aa44b47032c770b3393,
         type: 3}
       propertyPath: avatarURLs.Array.size
@@ -189,7 +189,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5162368791788645039, guid: edb2e07cc16d6aa44b47032c770b3393,
         type: 3}
-      propertyPath: "loadData.\u653B\u51FB\u95F4\u9694"
+      propertyPath: "loadData.\u653B\u51FB\u901F\u5EA6"
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -5162368791788645039, guid: edb2e07cc16d6aa44b47032c770b3393,
@@ -383,15 +383,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5128686435928808640, guid: edb2e07cc16d6aa44b47032c770b3393,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1100477556337834436}
+      addedObject: {fileID: 946884157443223579}
     - targetCorrespondingSourceObject: {fileID: 5128686435928808640, guid: edb2e07cc16d6aa44b47032c770b3393,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8172777638269005185}
+      addedObject: {fileID: 7579087935054704436}
     - targetCorrespondingSourceObject: {fileID: 5128686435928808640, guid: edb2e07cc16d6aa44b47032c770b3393,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6918256785717574013}
+      addedObject: {fileID: 1692129278402762113}
   m_SourcePrefab: {fileID: 100100000, guid: edb2e07cc16d6aa44b47032c770b3393, type: 3}
 --- !u!4 &5629237571289701796 stripped
 Transform:
@@ -405,7 +405,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2532904757201492739}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1100477556337834436
+--- !u!114 &946884157443223579
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -414,28 +414,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 7208695473887168451}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83eeca4de19441e9a590a98f998cf850, type: 3}
+  m_Script: {fileID: 11500000, guid: 142c4a318e0d462d94886c399c763fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   loadData:
     id: 101
     name: "\u5355\u4F53\u666E\u653B"
-    script: "Arknights.Skills.\u4E3B\u52A8"
+    script: "Arknights.Skills.\u5355\u4F53\u666E\u653B"
+    buff_ids: []
     icon_name: skill_icon_skchr_texas_2
+    permanent: 1
     auto: 1
     auto_time: 0
     range_type: 3
     range_id: 
-    change_attribute: 
-    fixed_value: 0
-    percentage_value: 0
     ext_value_1: 0
     start_e: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
     cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
-    durantion: []
   iconURL: ui://wnbsox0hnnfh4i
   level: 0
---- !u!114 &8172777638269005185
+  carrying: 0
+--- !u!114 &7579087935054704436
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -444,28 +443,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 7208695473887168451}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f47c7068c0b147239a1b3ab574a6694c, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a301bdacc3741d58fb6afe86a112301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   loadData:
     id: 201
     name: "\u6218\u672F\u5FEB\u9012"
-    script: "Arknights.Skills.\u88AB\u52A8"
+    script: "Arknights.Skills.\u52A0\u90E8\u7F72\u8D39\u7528"
+    buff_ids: []
     icon_name: skill_icon_skchr_texas_2
-    auto: 0
+    permanent: 1
+    auto: 1
     auto_time: 2
     range_type: 0
     range_id: 
-    change_attribute: 
-    fixed_value: 0
-    percentage_value: 0
-    ext_value_1: 0
+    ext_value_1: 1
     start_e: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
     cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
-    durantion: []
   iconURL: ui://wnbsox0hnnfh4i
   level: 0
---- !u!114 &6918256785717574013
+  carrying: 0
+--- !u!114 &1692129278402762113
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -474,24 +472,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 7208695473887168451}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83eeca4de19441e9a590a98f998cf850, type: 3}
+  m_Script: {fileID: 11500000, guid: 59ab1bd74b6146699e43fb87113f3723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   loadData:
     id: 202
     name: "\u5251\u96E8"
-    script: "Arknights.Skills.\u4E3B\u52A8"
+    script: "Arknights.Skills.\u7FA4\u4F53\u4F24\u5BB3"
+    buff_ids:
+    - 1001
     icon_name: skill_icon_skchr_texas_2
+    permanent: 1
     auto: 0
     auto_time: 0
     range_type: 4
     range_id: 3
-    change_attribute: 
-    fixed_value: 0
-    percentage_value: 0
     ext_value_1: 1
     start_e: 1400000015000000160000001700000018000000190000001a0000001b0000001c0000001e000000
     cost_e: 28000000280000002800000028000000280000002800000028000000280000002800000028000000
-    durantion: []
   iconURL: ui://wnbsox0hnnfh4i
   level: 0
+  carrying: 0

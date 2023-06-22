@@ -5,6 +5,7 @@ namespace Arknights.Data
     {
         public static Character[] Character;
         public static Skill[] Skill;
+        public static Buff[] Buff;
         public static SkillRange[] SkillRange;
         public static Grid[] Grid;
 
@@ -12,6 +13,7 @@ namespace Arknights.Data
         {
             Character = Load<Character[]>("Character");
             Skill = Load<Skill[]>("Skill");
+            Buff = Load<Buff[]>("Buff");
             SkillRange = Load<SkillRange[]>("SkillRange");
             Grid = Load<Grid[]>("Grid");
         }

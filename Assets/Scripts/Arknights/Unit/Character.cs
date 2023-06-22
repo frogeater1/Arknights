@@ -9,6 +9,7 @@ using Spine.Unity;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Arknights
 {
@@ -49,7 +50,9 @@ namespace Arknights
         public float skillDuration; //技能时间 //注意这个技能持续时间是放哪个技能时动态设置的
 
         public int skinIdx;
-        public int skillIdx;
+
+        [FormerlySerializedAs("skillIdx")]
+        public int carryingSkillIdx;
 
         ///以下是战斗中临时的数据
         public int cardListIdx; //在卡盒中的索引
@@ -117,27 +120,35 @@ namespace Arknights
 
             if (loadData.id == "1")
             {
-                skillIdx = 2;
+                carryingSkillIdx = 2;
             }
 
             if (loadData.id == "2")
             {
-                skillIdx = 3;
+                carryingSkillIdx = 3;
             }
 
             foreach (var s in skills)
             {
-                if (s is 主动)
+                if (s.loadData.permanent)
                 {
-                    var 主动 = (主动)s;
-                    主动.level = 1;
+                    s.carrying = true;
+                }
+                else
+                {
+                    if (carryingSkillIdx == int.Parse(s.loadData.id))
+                    {
+                        s.carrying = true;
+                    }
+
+                    s.level = 1;
                 }
             }
             //tmp end
 
             player = p;
 
-            attackDuration = loadData.攻击间隔;
+            attackDuration = 1f / loadData.攻击速度;
 
             attack = loadData.攻击力;
             maxHp = loadData.生命上限;
@@ -145,7 +156,7 @@ namespace Arknights
             coolDown = loadData.再部署时间;
             lastCoolDown = 0;
 
-            curSkill = skills[skillIdx];
+            curSkill = skills[carryingSkillIdx];
 
             maxSp = curSkill.loadData.cost_e[curSkill.level - 1];
             curSp = curSkill.loadData.start_e[curSkill.level - 1];
@@ -253,6 +264,11 @@ namespace Arknights
         public void Attack()
         {
             skills[0].Use(this, target);
+        }
+
+        public void Skill(主动 skill)
+        {
+            skill.Use(this, null);
         }
 
         public void SeekTarget()

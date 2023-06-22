@@ -42,7 +42,7 @@ namespace Arknights.Data
         
         public int 部署费用;
         
-        public float 攻击间隔;
+        public float 攻击速度;
         
         public string 攻击范围;
 
@@ -65,7 +65,7 @@ namespace Arknights.Data
             target.法术防御 = 法术防御;
             target.再部署时间 = 再部署时间;
             target.部署费用 = 部署费用;
-            target.攻击间隔 = 攻击间隔;
+            target.攻击速度 = 攻击速度;
             target.攻击范围 = 攻击范围;
         }
     }

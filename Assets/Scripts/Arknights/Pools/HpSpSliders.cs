@@ -18,17 +18,17 @@ public class HpSpSliders : PoolParent
         );
     }
 
-    public void ShowHpSp(Character character)
+    public void ShowHpSp(Unit unit)
     {
         var go = pool.Get();
-        character.hpspSlider = go.GetComponent<HpSpSlider>();
-        character.hpspSlider.Init(character);
+        unit.hpspSlider = go.GetComponent<HpSpSlider>();
+        unit.hpspSlider.Init(unit);
     }
 
     public void HideHpSp(Character character)
     {
         pool.Release(character.hpspSlider.gameObject);
-        character.hpspSlider.character = null;
+        character.hpspSlider.unit = null;
         character.hpspSlider = null;
     }
 }

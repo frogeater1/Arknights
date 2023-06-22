@@ -10,6 +10,7 @@ namespace Arknights.Skills
 
         public int level;
 
+        public bool carrying;
 
         public abstract void Use(Unit self, Unit target = null);
 
