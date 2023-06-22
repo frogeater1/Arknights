@@ -58,6 +58,7 @@ namespace Arknights
 
         private void __touchBegin(EventContext context)
         {
+            if (!canTouch) return;
             InputEvent evt = context.inputEvent;
             startPos = evt.position;
             var startXY = startPos - origin;
@@ -69,6 +70,7 @@ namespace Arknights
 
         private void __touchMove(EventContext context)
         {
+            if (!canTouch) return;
             moving = true;
             //拖拽逻辑
             InputEvent evt = context.inputEvent;
@@ -118,6 +120,7 @@ namespace Arknights
 
         private void __touchEnd(EventContext context)
         {
+            if (!canTouch) return;
             m_drager.SetXY(origin.x, origin.y);
             m_drager.visible = false;
             Game.Instance.attackRange.Hide();
@@ -146,24 +149,12 @@ namespace Arknights
             {
                 m_cooldowntext.visible = true;
                 m_cooldowntext.text = character.lastCoolDown.ToString();
-                if (canTouch)
-                {
-                    onTouchBegin.Remove(__touchBegin);
-                    onTouchMove.Remove(__touchMove);
-                    onTouchEnd.Remove(__touchEnd);
-                    canTouch = false;
-                }
+                canTouch = false;
             }
             else
             {
                 m_cooldowntext.visible = false;
-                if (!canTouch)
-                {
-                    onTouchBegin.Set(__touchBegin);
-                    onTouchMove.Set(__touchMove);
-                    onTouchEnd.Set(__touchEnd);
-                    canTouch = true;
-                }
+                canTouch = true;
             }
 
             m_cooldown.fillAmount = character.lastCoolDown / character.coolDown;
