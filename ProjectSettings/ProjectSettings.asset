@@ -795,7 +795,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Standalone: OUTLINE_TEST
+    Standalone: OUTLINE_TEST1
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

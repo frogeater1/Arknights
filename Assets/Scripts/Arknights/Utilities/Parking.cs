@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using UnityEditor.Build.Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -45,8 +46,15 @@ namespace Arknights
             var loading = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Single);
             loading.allowSceneActivation = false;
             Main.Instance.ui_loading.FadeOut();
-            await UniTask.WaitUntil(() => Main.Instance.ui_loading.m_stage.visible);
-            await UniTask.Delay(500);
+            await UniTask.WaitUntil(() =>
+            {
+                //bugtotest
+                var a = Main.Instance;
+                var b = a.ui_loading;
+                var c = b.m_stage;
+                return Main.Instance.ui_loading.m_stage.visible;
+            });
+            await UniTask.Delay(1000);
             loading.allowSceneActivation = true;
         }
     }

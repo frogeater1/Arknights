@@ -60,8 +60,8 @@ public enum 方向
 
 public enum CharacterState
 {
-    手牌,
-    场中
+    场下,
+    场上,
 }
 
 public enum Team
@@ -77,4 +77,15 @@ public enum RoomState
     create_waiting,
     host_waiting,
     guest_waiting,
+}
+
+public enum EFSMState
+{
+    Idle,
+    Start,
+    Attack,
+    Move,
+    Skill,
+    Die,
+    Card,//这个是指在手牌状态，没有对应的动画
 }

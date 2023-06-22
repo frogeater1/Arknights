@@ -27,5 +27,23 @@ namespace Arknights
             Dispacher.SendMsg(rpcMsg);
 #endif
         }
+
+        public static void Exit(Character character)
+        {
+            Debug.Log("Exit");
+            var rpcMsg = new RpcMsg
+            {
+                From = character.player.playerId,
+                Command = Any.Pack(new Command_Exit
+                {
+                    CardIdx = character.cardListIdx,
+                })
+            };
+#if OUTLINE_TEST
+            Dispacher.rpcMsgs.Enqueue(rpcMsg);
+#else
+            Dispacher.SendMsg(rpcMsg);
+#endif
+        }
     }
 }

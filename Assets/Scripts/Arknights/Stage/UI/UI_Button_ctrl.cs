@@ -87,7 +87,7 @@ namespace Arknights
             {
                 EventManager.CallCancelSelect();
                 Commander.Enter(Game.Instance.CharacterManager.curCharacter);
-                Game.Instance.ui_battle.下场();
+                Game.Instance.ui_battle.进场();
                 Game.Instance.CharacterManager.curCharacter = null;
             }
         }

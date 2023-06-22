@@ -1,4 +1,5 @@
-﻿using FairyGUI;
+﻿using System.Globalization;
+using FairyGUI;
 using UnityEngine;
 
 namespace Arknights
@@ -136,6 +137,23 @@ namespace Arknights
                     Game.Instance.ui_battle.m_card_list.selectedIndex = -1;
                 }
             }
+        }
+
+        protected override void OnUpdate()
+        {
+            base.OnUpdate();
+
+            if (character.lastCoolDown > 0)
+            {
+                m_cooldowntext.visible = true;
+                m_cooldowntext.text = character.lastCoolDown.ToString();
+            }
+            else
+            {
+                m_cooldowntext.visible = false;
+            }
+            
+            m_cooldown.fillAmount = character.lastCoolDown / character.coolDown;
         }
     }
 }

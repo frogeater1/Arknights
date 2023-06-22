@@ -26,7 +26,26 @@ namespace Arknights
         public Skills.Skill[] skills;
 
 
-        public float attackDuration; //普攻时间
+        private float _attackDuration;
+
+        public float attackDuration
+        {
+            get => _attackDuration;
+
+            set
+            {
+                //bugtotest
+                var a = skeletonAnimation;
+                var b = a.skeleton;
+                var c = b.Data;
+                var d = c.FindAnimation(loadData.attack_anim_name);
+                var e = d.Duration;
+                skeletonAnimation.skeleton.Data.FindAnimation(loadData.attack_anim_name).Duration = attackDuration;
+                _attackDuration = value;
+            }
+        } //普攻时间
+
+
         public float skillDuration; //技能时间 //注意这个技能持续时间是放哪个技能时动态设置的
 
         public int skinIdx;
@@ -38,22 +57,15 @@ namespace Arknights
         //之前是朝左还是朝右,不保存上下,默认朝右,选择UI用的的，不是真正的方向，不要用来判断朝向
         private 方向 oldSelectDir = 方向.右;
 
-        private CharacterState state = CharacterState.手牌;
-
-        //以下两个bool的作用是,移动时，不能正在普攻或放技能时且不能有攻击目标，普攻时，不能正在普攻或放技能，放技能时，不能正在放技能
-        private bool isSkilling = false; //正在放技能中
-        private bool isAttacking = false; //正在普攻中
 
         public Skill curSkill;
         public int curSp;
         public int maxSp;
+        public float coolDown;
+        public float lastCoolDown; //剩余冷却时间
 
-        private Unit target;
-
-        public bool finishedSkill = false;
-        public int spTiming = 0;
-        public int attackTiming = 0;
-        public int skillTiming = 0;
+        public Unit target;
+        public Vector2Int targetLogicPos; //记录一下目标的位置，用来判断是否需要重新索敌
 
 #if UNITY_EDITOR
         public void Load(Data.Character data)
@@ -74,8 +86,9 @@ namespace Arknights
                 skeletonAnimation = SkeletonAnimation.NewSkeletonAnimationGameObject(sda);
                 skeletonAnimation.AnimationName = "Idle";
                 skeletonAnimation.transform.localPosition = new Vector3(0, 0, 0);
-                skeletonAnimation.transform.rotation = Quaternion.Euler(60, 0, 0);
+                skeletonAnimation.transform.rotation = Quaternion.Euler(Settings.ROTATIONANGLE, 0, 0);
                 skeletonAnimation.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+                skeletonAnimation.skeleton.Data.FindAnimation("Start").Duration = 0.5f;
                 skeletonAnimation.transform.SetParent(transform);
             }
 
@@ -126,16 +139,21 @@ namespace Arknights
 
             attackDuration = loadData.攻击间隔;
 
-            skeletonAnimation.skeleton.Data.FindAnimation(loadData.attack_anim_name).Duration = attackDuration;
-
             attack = loadData.攻击力;
             maxHp = loadData.生命上限;
             curHp = maxHp;
+            coolDown = loadData.再部署时间;
+            lastCoolDown = 0;
 
             curSkill = skills[skillIdx];
 
             maxSp = curSkill.loadData.cost_e[curSkill.level - 1];
             curSp = curSkill.loadData.start_e[curSkill.level - 1];
+
+            fsmSystem = new FSMSystem(this);
+            Debug.Log("init");
+            fsmSystem.SwitchState(EFSMState.Card);
+            EventManager.LogicUpdate += LogicUpdate;
         }
 
 
@@ -154,31 +172,31 @@ namespace Arknights
             {
                 case 方向.右:
                     attackDir = dir;
-                    skeletonAnimation.skeleton.ScaleX = 1;
                     oldSelectDir = dir;
                     break;
                 case 方向.左:
                     attackDir = dir;
                     oldSelectDir = dir;
-                    skeletonAnimation.skeleton.ScaleX = -1;
                     break;
                 case 方向.上:
                     attackDir = dir;
                     //切换成背面的spine，暂时只有正面的
-                    skeletonAnimation.skeleton.ScaleX = oldSelectDir == 方向.右 ? 1 : -1;
                     break;
                 case 方向.下:
                     attackDir = dir;
-                    skeletonAnimation.skeleton.ScaleX = oldSelectDir == 方向.右 ? 1 : -1;
                     break;
             }
-        }
 
+            skeletonAnimation.skeleton.ScaleX = oldSelectDir switch
+            {
+                方向.右 => 1,
+                方向.左 => -1,
+                _ => 1
+            };
+        }
 
         public void Enter()
         {
-            state = CharacterState.场中;
-            EventManager.LogicUpdate += LogicUpdate;
             Map.Instance.AddUnit(this);
             Game.Instance.hpSpSliders.ShowHpSp(this);
             if (loadData.部署类型 == 部署类型.Both)
@@ -196,19 +214,11 @@ namespace Arknights
                 当前部署类型 = loadData.部署类型;
             }
 
-            skeletonAnimation.timeScale = 2;
-            skeletonAnimation.state.SetAnimation(0, "Start", false);
-            //播放完毕后切到idle
-            skeletonAnimation.state.Complete += (trackEntry) =>
-            {
-                skeletonAnimation.timeScale = 1;
-                skeletonAnimation.state.SetAnimation(0, "Idle", true);
-            };
+            fsmSystem.SwitchState(EFSMState.Start);
         }
 
         private void OnMouseUpAsButton()
         {
-            if (state != CharacterState.场中) return;
             if (player.team != Game.Instance.me.team) return;
             //必须先设置当前操作角色，否则directionSelect会找不到该在哪显示
             Game.Instance.CharacterManager.curCharacter = this;
@@ -218,11 +228,15 @@ namespace Arknights
 
         public void Exit()
         {
-            EventManager.LogicUpdate -= LogicUpdate;
+            lastCoolDown = coolDown;
+            fsmSystem.SwitchState(EFSMState.Card);
             Map.Instance.RemoveUnit(this);
             Hide();
             Game.Instance.hpSpSliders.HideHpSp(this);
-            state = CharacterState.手牌;
+            if (player.playerId == Game.Instance.me.playerId)
+            {
+                Game.Instance.ui_battle.回收(cardListIdx);
+            }
         }
 
         public void Hide()
@@ -233,83 +247,24 @@ namespace Arknights
 
         private void LogicUpdate()
         {
-            //更新sp数据
-            if (curSp < maxSp)
-            {
-                //每60逻辑帧即1秒钟增加1
-                if (Game.Instance.logicFrame - spTiming >= 60)
-                {
-                    curSp++;
-                    spTiming = Game.Instance.logicFrame;
-                }
-            }
-
-            //判断攻击和移动
-            if (isSkilling)
-            {
-                if (Game.Instance.logicFrame - skillTiming >= 60 * skillDuration)
-                {
-                    isSkilling = false;
-                }
-            }
-            else if (isAttacking)
-            {
-                if (finishedSkill == false && Game.Instance.logicFrame - attackTiming >= 40 * attackDuration)
-                {
-                    //等40逻辑帧的前摇再真正攻击
-                    skills[0].Use(this, target);
-                    finishedSkill = true;
-                }
-
-                if (Game.Instance.logicFrame - attackTiming >= 60 * attackDuration)
-                {
-                    isAttacking = false;
-                    finishedSkill = false;
-                    skeletonAnimation.state.TimeScale = 1;
-                }
-            }
-
-            if (isSkilling || isAttacking) return;
-
-            if (!target)
-                target = SeekTarget();
-            if (target)
-            {
-                Attack();
-            }
-            else
-            {
-                if (当前部署类型 == 部署类型.地面)
-                {
-                    Move();
-                }
-            }
+            fsmSystem.states[fsmSystem.curState].LogicUpdate();
         }
 
-        private void Move()
+        public void Attack()
         {
-            //todo
+            skills[0].Use(this, target);
         }
 
-        private void Attack()
+        public void SeekTarget()
         {
-            skeletonAnimation.state.SetAnimation(0, loadData.attack_anim_name, false);
-            skeletonAnimation.state.TimeScale = attackDuration;
-            attackTiming = Game.Instance.logicFrame;
-            isAttacking = true;
-        }
-
-        private Unit SeekTarget()
-        {
-            foreach (var range in attackRange)
+            foreach (Vector2Int range in attackRange)
             {
-                var logicGrid = Map.Instance.CalculPos(logicPos, attackDir, range);
+                Vector2Int logicGrid = Map.Instance.CalculPos(logicPos, attackDir, range);
                 target = Map.Instance.CheckGrid(logicGrid, player.team == Team.Blue ? Team.Red : Team.Blue);
-                if (target)
-                    return target;
+                if (!target) continue;
+                targetLogicPos = target.logicPos;
+                break;
             }
-
-            return null;
         }
     }
 }

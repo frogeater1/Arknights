@@ -24,12 +24,12 @@ namespace Arknights
                 if (value)
                 {
                     Game.Instance.ui_battle.ShowStats(true, value);
-                    Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, -3));
+                    Game.Instance.CameraManager.DoRotation(new Vector3(Settings.ROTATIONANGLE, 0, -3));
                 }
                 else
                 {
                     Game.Instance.ui_battle.ShowStats(false);
-                    Game.Instance.CameraManager.DoRotation(new Vector3(60, 0, 0));
+                    Game.Instance.CameraManager.DoRotation(new Vector3(Settings.ROTATIONANGLE, 0, 0));
                 }
             }
         }

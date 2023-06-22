@@ -423,7 +423,7 @@ MonoBehaviour:
     script: "Arknights.Skills.\u4E3B\u52A8"
     icon_name: skill_icon_skchr_texas_2
     auto: 1
-    auto_time: 1
+    auto_time: 0
     range_type: 3
     range_id: 
     change_attribute: 

@@ -10,11 +10,18 @@ namespace Arknights
         partial void Init()
         {
             Game.Instance.ui_battle = this;
-            
+
             m_stats.visible = false;
             m_card_list.itemRenderer = RenderCard;
             m_card_list.numItems = 2;
             m_card_list.ResizeToFit();
+            
+            m_card_list.onClickItem.Add(__clickCard);
+        }
+
+        private void __clickCard(EventContext context)
+        {
+            Debug.Log(context.data);
         }
 
         public void CancelSelect()
@@ -22,17 +29,16 @@ namespace Arknights
             m_card_list.selectedIndex = -1;
         }
 
-        public void 下场()
+        public void 进场()
         {
             UI_Button_角色卡 button = (UI_Button_角色卡)m_card_list.GetChildAt(m_card_list.selectedIndex);
             button.visible = false;
             m_card_list.selectedIndex = -1;
         }
 
-        public void 回收()
+        public void 回收(int cardListIdx)
         {
-            var character = Game.Instance.CharacterManager.curCharacter;
-            UI_Button_角色卡 button = (UI_Button_角色卡)m_card_list.GetChildAt(character.cardListIdx);
+            UI_Button_角色卡 button = (UI_Button_角色卡)m_card_list.GetChildAt(cardListIdx);
             button.visible = true;
         }
 

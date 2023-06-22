@@ -47,11 +47,9 @@ namespace Arknights
         private void Start()
         {
             t = new Timer();
-            t.Interval = 1000f / 60;
+            t.Interval = 1000f / Settings.FPS;
             t.Elapsed += (sender, args) =>
             {
-                Debug.Log("update");
-
                 RpcMsg[] rpcs;
                 lock (Dispacher.rpcMsgs)
                 {

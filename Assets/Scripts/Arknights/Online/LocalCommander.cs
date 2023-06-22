@@ -12,5 +12,11 @@ namespace Arknights
             character.ChangeDirection((方向)command.Direction);
             character.Enter();
         }
+
+        public static void Exit(int rpcFrom, Command_Exit command)
+        {
+            Character character = Game.Instance.CharacterManager.characters[rpcFrom - 1][command.CardIdx];
+            character.Exit();
+        }
     }
 }
