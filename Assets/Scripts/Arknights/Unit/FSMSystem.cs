@@ -21,11 +21,13 @@ namespace Arknights
             states.Add(EFSMState.Die, new DieState(this));
             states.Add(EFSMState.Skill, new SkillState(this));
             states.Add(EFSMState.Card, new CardState(this));
+            states.Add(EFSMState.Stiff, new StiffState(this));
         }
 
         public void SwitchState(EFSMState state)
         {
             Debug.Log("SwitchState:" + state);
+            states[curState].Exit();
             curState = state;
             states[curState].Action();
         }

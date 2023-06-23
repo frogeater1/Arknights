@@ -23,7 +23,7 @@ namespace Arknights
 
         public abstract void Action();
 
-        public void OnExit()
+        public virtual void Exit()
         {
         }
     }
@@ -45,11 +45,18 @@ namespace Arknights
                 fsmSystem.SwitchState(EFSMState.Die);
                 return;
             }
-            
+
             if (spFrame >= Settings.FPS)
             {
                 character.curSp++;
                 spFrame = 0;
+            }
+
+            //可能需要移除所以倒序遍历
+            for (int i = character.buffs.Count - 1; i >= 0; i--)
+            {
+                var buff = character.buffs[i];
+                buff.LogicUpdate();
             }
 
             if (!character.target)
@@ -93,23 +100,31 @@ namespace Arknights
         {
             logicFrame++;
             spFrame++;
-            if (logicFrame >= 30)
+
+            if (logicFrame >= Settings.FPS * 0.5f)
             {
                 fsmSystem.SwitchState(EFSMState.Idle);
             }
-            
+
             var character = fsmSystem.character;
-            
+
             if (character.curHp <= 0)
             {
                 fsmSystem.SwitchState(EFSMState.Die);
                 return;
             }
-            
+
             if (spFrame >= Settings.FPS)
             {
                 character.curSp++;
                 spFrame = 0;
+            }
+
+            //可能需要移除所以倒序遍历
+            for (int i = character.buffs.Count - 1; i >= 0; i--)
+            {
+                var buff = character.buffs[i];
+                buff.LogicUpdate();
             }
         }
 
@@ -167,11 +182,19 @@ namespace Arknights
                 character.curSp++;
                 spFrame = 0;
             }
-            
+
+            //可能需要移除所以倒序遍历
+            for (int i = character.buffs.Count - 1; i >= 0; i--)
+            {
+                var buff = character.buffs[i];
+                buff.LogicUpdate();
+            }
+
+
             if (done == false && logicFrame >= Settings.FPS * character.attackDuration * 0.5f)
             {
                 done = true;
-                character.Attack();
+                character.DoAttack();
             }
 
             if (done && logicFrame >= Settings.FPS * character.attackDuration)
@@ -198,7 +221,7 @@ namespace Arknights
         public override void LogicUpdate()
         {
             spFrame++;
-            
+
             if (fsmSystem.character.curHp <= 0)
             {
                 fsmSystem.SwitchState(EFSMState.Die);
@@ -211,7 +234,13 @@ namespace Arknights
                 character.curSp++;
                 spFrame = 0;
             }
-            
+
+            //可能需要移除所以倒序遍历
+            for (int i = character.buffs.Count - 1; i >= 0; i--)
+            {
+                var buff = character.buffs[i];
+                buff.LogicUpdate();
+            }
         }
 
         public override void Action()
@@ -221,21 +250,53 @@ namespace Arknights
 
     public class SkillState : FSMState
     {
+        public bool done = false;
+        public GameObject skillEffect;
+
         public SkillState(FSMSystem fsm) : base(fsm)
         {
         }
 
         public override void LogicUpdate()
         {
-            if (fsmSystem.character.curHp <= 0)
+            logicFrame++;
+            var character = fsmSystem.character;
+            if (character.curHp <= 0)
             {
                 fsmSystem.SwitchState(EFSMState.Die);
                 return;
+            }
+
+
+            //可能需要移除所以倒序遍历
+            for (int i = character.buffs.Count - 1; i >= 0; i--)
+            {
+                var buff = character.buffs[i];
+                buff.LogicUpdate();
+            }
+
+
+            if (done == false && logicFrame >= Settings.FPS * character.skillDuration * 0.5f)
+            {
+                done = true;
+                character.DoSkill();
+            }
+
+            if (done && logicFrame >= Settings.FPS * character.skillDuration)
+            {
+                fsmSystem.SwitchState(EFSMState.Idle);
             }
         }
 
         public override void Action()
         {
+            var character = fsmSystem.character;
+            logicFrame = 0;
+            done = false;
+            character.curSp = 0;
+            fsmSystem.character.skeletonAnimation.state.SetAnimation(0, "Skill", false);
+
+            Game.Instance.PoolManager.skillEffects.ShowEffect("effect_" + character.curSkill.loadData.name, character.logicPos, 1000).Forget();
         }
     }
 
@@ -262,6 +323,55 @@ namespace Arknights
         public override void Action()
         {
             logicFrame = 0;
+            //可能需要移除所以倒序遍历
+            for (int i = fsmSystem.character.buffs.Count - 1; i >= 0; i--)
+            {
+                var buff = fsmSystem.character.buffs[i];
+                buff.Remove();
+            }
+        }
+    }
+
+    public class StiffState : FSMState
+    {
+        public StiffState(FSMSystem fsmSystem) : base(fsmSystem)
+        {
+        }
+
+        public override void LogicUpdate()
+        {
+            var character = fsmSystem.character;
+            spFrame++;
+
+            if (character.curHp <= 0)
+            {
+                fsmSystem.SwitchState(EFSMState.Die);
+                return;
+            }
+
+            if (spFrame >= Settings.FPS)
+            {
+                character.curSp++;
+                spFrame = 0;
+            }
+
+            //可能需要移除所以倒序遍历
+            for (int i = character.buffs.Count - 1; i >= 0; i--)
+            {
+                var buff = character.buffs[i];
+                buff.LogicUpdate();
+            }
+        }
+
+        public override void Exit()
+        {
+            fsmSystem.character.skeletonAnimation.timeScale = 1;
+        }
+
+        public override void Action()
+        {
+            //停止动画
+            fsmSystem.character.skeletonAnimation.timeScale = 0;
         }
     }
 }

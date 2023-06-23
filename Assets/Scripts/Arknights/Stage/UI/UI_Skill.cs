@@ -7,7 +7,7 @@ namespace Arknights
 {
     public partial class UI_Skill
     {
-        public 主动 skill;
+        public Skill skill;
         public Character character;
 
 
@@ -22,7 +22,8 @@ namespace Arknights
             var cost_sp = skill.loadData.cost_e[skill.level - 1];
             if (character.curSp >= cost_sp)
             {
-                character.Skill(skill);
+                Commander.Skill(Game.Instance.CharacterManager.curCharacter);
+                Game.Instance.CharacterManager.curCharacter = null;
             }
         }
 
@@ -30,7 +31,7 @@ namespace Arknights
         public void Show(Character character)
         {
             this.character = character;
-            skill = (主动)character.skills[character.carryingSkillIdx];
+            skill = character.skills[character.carryingSkillIdx];
             m_skill_button.icon = skill.iconURL;
             Refresh();
         }

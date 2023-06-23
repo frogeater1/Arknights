@@ -127,6 +127,7 @@ namespace Arknights
             {
                 carryingSkillIdx = 3;
             }
+            
 
             foreach (var s in skills)
             {
@@ -140,9 +141,9 @@ namespace Arknights
                     {
                         s.carrying = true;
                     }
-
-                    s.level = 1;
                 }
+
+                s.level = 1;
             }
             //tmp end
 
@@ -158,6 +159,13 @@ namespace Arknights
 
             curSkill = skills[carryingSkillIdx];
 
+            skillDuration = curSkill.loadData.duration[curSkill.level - 1];
+            
+            //bugtotest
+            Debug.Log(curSkill);
+            Debug.Log(curSkill.loadData);
+            Debug.Log(curSkill.loadData.cost_e.Length);
+            Debug.Log(curSkill.level);
             maxSp = curSkill.loadData.cost_e[curSkill.level - 1];
             curSp = curSkill.loadData.start_e[curSkill.level - 1];
 
@@ -209,7 +217,7 @@ namespace Arknights
         public void Enter()
         {
             Map.Instance.AddUnit(this);
-            Game.Instance.hpSpSliders.ShowHpSp(this);
+            Game.Instance.PoolManager.hpSpSliders.ShowHp(this);
             if (loadData.部署类型 == 部署类型.Both)
             {
                 var grid_type = Map.Instance.GetGrid(logicPos).type;
@@ -243,7 +251,7 @@ namespace Arknights
             fsmSystem.SwitchState(EFSMState.Card);
             Map.Instance.RemoveUnit(this);
             Hide();
-            Game.Instance.hpSpSliders.HideHpSp(this);
+            Game.Instance.PoolManager.hpSpSliders.HideHp(this);
             if (player.playerId == Game.Instance.me.playerId)
             {
                 Game.Instance.ui_battle.回收(cardListIdx);
@@ -261,14 +269,19 @@ namespace Arknights
             fsmSystem.states[fsmSystem.curState].LogicUpdate();
         }
 
-        public void Attack()
+        public void DoAttack()
         {
             skills[0].Use(this, target);
         }
 
-        public void Skill(主动 skill)
+        public void Skill()
         {
-            skill.Use(this, null);
+            fsmSystem.SwitchState(EFSMState.Skill);
+        }
+        
+        public void DoSkill()
+        {
+            curSkill.Use(this, target);
         }
 
         public void SeekTarget()
@@ -276,7 +289,7 @@ namespace Arknights
             foreach (Vector2Int range in attackRange)
             {
                 Vector2Int logicGrid = Map.Instance.CalculPos(logicPos, attackDir, range);
-                target = Map.Instance.CheckGrid(logicGrid, player.team == Team.Blue ? Team.Red : Team.Blue);
+                target = Map.Instance.CheckGrid(logicGrid, player.team);
                 if (!target) continue;
                 targetLogicPos = target.logicPos;
                 break;

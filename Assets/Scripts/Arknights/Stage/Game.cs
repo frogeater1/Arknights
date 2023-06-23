@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Timers;
+using Arknights.Pools;
 using FairyGUI;
 using OnlineGame;
 using UnityEngine;
@@ -13,11 +14,7 @@ namespace Arknights
         public CharacterManager CharacterManager;
 
         public PoolManager PoolManager;
-
-        public AttackRange attackRange;
-
-        public HpSpSliders hpSpSliders;
-
+        
         public UI_Battle ui_battle;
         public UI_DirectionSelect ui_directionSelect;
 

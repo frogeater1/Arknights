@@ -6,8 +6,10 @@ using UnityEngine.Pool;
 
 namespace Arknights
 {
-    public class AttackRange : PoolParent
+    public class AttackRange : MonoBehaviour
     {
+        public GameObject[] prefabs;
+        public Dictionary<string, ObjectPool<GameObject>> pools = new();
         private List<GameObject> attackGrids;
 
         private void OnEnable()
@@ -39,20 +41,18 @@ namespace Arknights
         }
 
 
-        public override void CreatePool(GameObject prefab)
+        public  void CreatePool()
         {
-            pool = new ObjectPool<GameObject>(
-                () => Instantiate(prefab, transform),
+            pools.Add(prefabs[0].name, new ObjectPool<GameObject>(
+                () => Instantiate(prefabs[0], transform),
                 go => go.SetActive(true),
                 go => go.SetActive(false),
                 Destroy
-            );
-            // Game.Instance.PoolManager.pools.Add(this);
+            ));
         }
 
         public void Show(方向 dir = 方向.右)
         {
-
             Character character = Game.Instance.CharacterManager.curCharacter;
             transform.localPosition = new Vector3(character.logicPos.x + 0.5f, 0.03f, character.logicPos.y + 0.5f);
 
@@ -60,14 +60,14 @@ namespace Arknights
             {
                 foreach (var g in attackGrids)
                 {
-                    pool.Release(g);
+                    pools["AttackGrid"].Release(g);
                 }
             }
 
             attackGrids = new List<GameObject>();
             foreach (var range in character.attackRange)
             {
-                var attack_grid = pool.Get();
+                var attack_grid = pools["AttackGrid"].Get();
 
                 var localPos = Map.Instance.CalculPos(Vector2Int.zero, dir, range);
                 attack_grid.transform.localPosition = new Vector3(localPos.x, 0, localPos.y);
@@ -93,7 +93,7 @@ namespace Arknights
 
             foreach (var g in attackGrids)
             {
-                pool.Release(g);
+                pools["AttackGrid"].Release(g);
             }
 
             attackGrids = null;

@@ -77,6 +77,10 @@ namespace Arknights
                             {
                                 var command = rpc.Command.Unpack<Command_Exit>();
                                 LocalCommander.Exit(rpc.From, command);
+                            }else if (rpc.Command.Is(Command_Skill.Descriptor))
+                            {
+                                var command = rpc.Command.Unpack<Command_Skill>();
+                                LocalCommander.Skill(rpc.From, command);
                             }
                         }
 

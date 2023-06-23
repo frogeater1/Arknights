@@ -18,5 +18,11 @@ namespace Arknights
             Character character = Game.Instance.CharacterManager.characters[rpcFrom - 1][command.CardIdx];
             character.Exit();
         }
+
+        public static void Skill(int rpcFrom, Command_Skill command)
+        {
+            Character character = Game.Instance.CharacterManager.characters[rpcFrom - 1][command.CardIdx];
+            character.Skill();
+        }
     }
 }

@@ -45,5 +45,23 @@ namespace Arknights
             Dispacher.SendMsg(rpcMsg);
 #endif
         }
+
+        public static void Skill(Character character)
+        {
+            Debug.Log("Skill");
+            var rpcMsg = new RpcMsg
+            {
+                From = character.player.playerId,
+                Command = Any.Pack(new Command_Skill
+                {
+                    CardIdx = character.cardListIdx,
+                })
+            };
+#if OUTLINE_TEST
+            Dispacher.rpcMsgs.Enqueue(rpcMsg);
+#else
+            Dispacher.SendMsg(rpcMsg);
+#endif
+        }
     }
 }

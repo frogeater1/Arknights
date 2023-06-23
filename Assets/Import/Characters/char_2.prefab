@@ -494,19 +494,25 @@ MonoBehaviour:
     id: 101
     name: "\u5355\u4F53\u666E\u653B"
     script: "Arknights.Skills.\u5355\u4F53\u666E\u653B"
-    buff_ids: []
+    buff_id: 
     icon_name: skill_icon_skchr_texas_2
+    effect_name: 
     permanent: 1
     auto: 1
     auto_time: 0
     range_type: 3
     range_id: 
-    ext_value_1: 0
+    ext_value_type_1: 0
+    ext_values_1: []
+    damage_type: 0
     start_e: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
     cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
+    duration: []
   iconURL: ui://wnbsox0hnnfh4i
+  effect: {fileID: 0}
   level: 0
   carrying: 0
+  range: []
 --- !u!114 &5750003685963585956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,20 +529,25 @@ MonoBehaviour:
     id: 211
     name: "\u5FEB\u901F\u5F39\u5323"
     script: "Arknights.Skills.\u88AB\u52A8Buff"
-    buff_ids:
-    - 100
+    buff_id: 100
     icon_name: skill_icon_skchr_texas_2
+    effect_name: 
     permanent: 1
     auto: 0
     auto_time: 0
     range_type: 1
     range_id: 
-    ext_value_1: 0
+    ext_value_type_1: 0
+    ext_values_1: []
+    damage_type: 0
     start_e: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
     cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
+    duration: []
   iconURL: ui://wnbsox0hnnfh4i
+  effect: {fileID: 0}
   level: 0
   carrying: 0
+  range: []
 --- !u!114 &4150477670502047657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -553,21 +564,25 @@ MonoBehaviour:
     id: 212
     name: "\u5929\u4F7F\u7684\u795D\u798F"
     script: "Arknights.Skills.\u5929\u4F7F\u7684\u795D\u798F"
-    buff_ids:
-    - 110
-    - 120
+    buff_id: 201
     icon_name: skill_icon_skchr_texas_2
+    effect_name: 
     permanent: 1
     auto: 1
     auto_time: 3
     range_type: 5
     range_id: 
-    ext_value_1: 0
+    ext_value_type_1: 0
+    ext_values_1: []
+    damage_type: 0
     start_e: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
     cost_e: 0f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f2700000f270000
+    duration: []
   iconURL: ui://wnbsox0hnnfh4i
+  effect: {fileID: 0}
   level: 0
   carrying: 0
+  range: []
 --- !u!114 &5871346467839673331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -584,20 +599,35 @@ MonoBehaviour:
     id: 213
     name: "\u8FC7\u8F7D"
     script: "Arknights.Skills.\u88AB\u52A8Buff"
-    buff_ids:
-    - 101
+    buff_id: 101
     icon_name: skill_icon_skchr_angel_3
+    effect_name: 
     permanent: 1
     auto: 1
     auto_time: 4
     range_type: 1
     range_id: 
-    ext_value_1: 0
+    ext_value_type_1: 0
+    ext_values_1: []
+    damage_type: 0
     start_e: 14000000140000001400000014000000140000001400000014000000140000001400000014000000
     cost_e: 32000000300000002e0000002c0000002a000000280000002600000024000000220000001e000000
+    duration:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
   iconURL: ui://wnbsox0hnnfh4j
+  effect: {fileID: 0}
   level: 0
   carrying: 0
+  range: []
 --- !u!4 &4603948672408753477 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7870531606919055015, guid: edb2e07cc16d6aa44b47032c770b3393,

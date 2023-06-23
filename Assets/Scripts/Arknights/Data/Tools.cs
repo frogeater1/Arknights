@@ -53,6 +53,8 @@ namespace Arknights.Data
 
                 MakeCharacter();
 
+                MakeBuff();
+
                 MakeMap();
             }
             catch (Exception e)
@@ -68,7 +70,6 @@ namespace Arknights.Data
         [MenuItem("Tools/Proto2cs")]
         public static void Proto2cs()
         {
-
             var process = Process.Start(new ProcessStartInfo()
             {
                 UseShellExecute = true,
@@ -110,6 +111,27 @@ namespace Arknights.Data
                 {
                     Object.DestroyImmediate(go.gameObject);
                 }
+            }
+        }
+
+
+        private static void MakeBuff()
+        {
+            foreach (var b in Buff)
+            {
+                var prefab = AssetDatabase.LoadAssetAtPath<Arknights.Buffs.Buff>($"Assets/Prefabs/Battle/Buff/{b.prefab}.prefab");
+                var go = PrefabUtility.InstantiatePrefab(prefab) as Arknights.Buffs.Buff;
+                try
+                {
+                    go.Load(b);
+                    PrefabUtility.SaveAsPrefabAsset(go.gameObject, $"Assets/Import/Buffs/{b.id}.prefab");
+                }
+                finally
+                {
+                    Object.DestroyImmediate(go.gameObject);
+                }
+                
+                prefab.Load(b);
             }
         }
 

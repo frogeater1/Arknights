@@ -3,32 +3,42 @@ using System.Collections.Generic;
 using Arknights;
 using Arknights.Pools;
 using Arknights.UGUI;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class HpSpSliders : PoolParent
+public class HpSpSliders : MonoBehaviour
 {
-    public override void CreatePool(GameObject prefab)
+    public HpSpSlider[] prefabs;
+    public Dictionary<string, ObjectPool<HpSpSlider>> pools = new();
+
+    public void CreatePool()
     {
-        pool = new ObjectPool<GameObject>(
-            () => Instantiate(prefab, transform),
-            go => go.SetActive(true),
-            go => go.SetActive(false),
-            Destroy
-        );
+        foreach (HpSpSlider prefab in prefabs)
+        {
+            pools.Add(prefab.name, new ObjectPool<HpSpSlider>(
+                () => Instantiate(prefab, transform),
+                slider => slider.gameObject.SetActive(true),
+                slider =>
+                {
+                    slider.gameObject.SetActive(false);
+                    slider.unit = null;
+                },
+                Destroy
+            ));
+        }
     }
 
-    public void ShowHpSp(Unit unit)
+    public void ShowHp(Unit unit)
     {
-        var go = pool.Get();
-        unit.hpspSlider = go.GetComponent<HpSpSlider>();
-        unit.hpspSlider.Init(unit);
+        var slider = (HpSlider)pools["HpSlider"].Get();
+        unit.hpSlider = slider;
+        slider.Init(unit);
     }
 
-    public void HideHpSp(Character character)
+    public void HideHp(Character character)
     {
-        pool.Release(character.hpspSlider.gameObject);
-        character.hpspSlider.unit = null;
-        character.hpspSlider = null;
+        pools["HpSlider"].Release(character.hpSlider);
+        character.hpSlider = null;
     }
 }

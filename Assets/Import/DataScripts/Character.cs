@@ -30,13 +30,13 @@ namespace Arknights.Data
         
         public 部署类型 部署类型;
         
-        public int 攻击力;
+        public float 攻击力;
         
-        public int 生命上限;
+        public float 生命上限;
         
-        public int 防御;
+        public float 防御;
         
-        public int 法术防御;
+        public float 法术防御;
         
         public float 再部署时间;
         

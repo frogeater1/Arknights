@@ -106,7 +106,7 @@ namespace Arknights
                     m_drager.visible = false;
                     character.FixedPos(logic_x, logic_z);
                     canSet = true;
-                    Game.Instance.attackRange.Show();
+                    Game.Instance.PoolManager.attackRange.Show();
                 }
             }
 
@@ -114,7 +114,7 @@ namespace Arknights
             {
                 m_drager.visible = true;
                 character.transform.position = new Vector3(1000, 0, 0);
-                Game.Instance.attackRange.Hide();
+                Game.Instance.PoolManager.attackRange.Hide();
             }
         }
 
@@ -123,7 +123,7 @@ namespace Arknights
             if (!canTouch) return;
             m_drager.SetXY(origin.x, origin.y);
             m_drager.visible = false;
-            Game.Instance.attackRange.Hide();
+            Game.Instance.PoolManager.attackRange.Hide();
             if (canSet)
             {
                 Game.Instance.ui_directionSelect.visible = true;

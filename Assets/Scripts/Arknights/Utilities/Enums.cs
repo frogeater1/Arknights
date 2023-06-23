@@ -88,4 +88,17 @@ public enum EFSMState
     Skill,
     Die,
     Card,//这个是指在手牌状态，没有对应的动画
+    Stiff, //僵直状态
+}
+
+public enum ValueType
+{
+    Fixed,
+    Percent,
+}
+
+public enum DamageType
+{
+    物理,
+    法术
 }

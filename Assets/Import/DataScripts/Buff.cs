@@ -12,13 +12,13 @@ namespace Arknights.Data
         
         public string name;
         
-        public string script;
+        public string prefab;
         
-        public string change_attribute;
+        public string[] change_attributes;
         
-        public float fixed_value;
+        public ValueType[] value_types;
         
-        public float percentage_value;
+        public float[] value;
         
         public float[] durantion;
 
@@ -26,10 +26,10 @@ namespace Arknights.Data
         {
             target.id = id;
             target.name = name;
-            target.script = script;
-            target.change_attribute = change_attribute;
-            target.fixed_value = fixed_value;
-            target.percentage_value = percentage_value;
+            target.prefab = prefab;
+            target.change_attributes = change_attributes;
+            target.value_types = value_types;
+            target.value = value;
             target.durantion = durantion;
         }
     }
